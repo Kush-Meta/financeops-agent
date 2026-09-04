@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Optional
 
 from sqlalchemy import select
@@ -79,7 +79,7 @@ def decide_approval(
     req.status = decision
     req.reviewed_by = reviewed_by
     req.review_note = review_note
-    req.reviewed_at = datetime.utcnow()
+    req.reviewed_at = datetime.now(timezone.utc).replace(tzinfo=None)
     db.commit()
     db.refresh(req)
 
@@ -146,7 +146,7 @@ def _execute(db: Session, req: ApprovalRequest) -> None:
             req.payload = {**payload, "created_entry_number": entry_number}
 
         req.status = "executed"
-        req.executed_at = datetime.utcnow()
+        req.executed_at = datetime.now(timezone.utc).replace(tzinfo=None)
         db.commit()
         if req.workflow_id:
             write_audit(

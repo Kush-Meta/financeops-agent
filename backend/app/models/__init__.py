@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import date, datetime, timezone
+
+def utcnow() -> datetime:
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
 from typing import Optional
 
 from sqlalchemy import (
@@ -31,7 +35,7 @@ class Vendor(Base):
     category: Mapped[str] = mapped_column(String(80), default="general")
     payment_terms_days: Mapped[int] = mapped_column(Integer, default=30)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
     invoices: Mapped[list[Invoice]] = relationship(back_populates="vendor")
 
@@ -44,7 +48,7 @@ class Customer(Base):
     name: Mapped[str] = mapped_column(String(200), index=True)
     segment: Mapped[str] = mapped_column(String(80), default="commercial")
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
 class Account(Base):
@@ -92,7 +96,7 @@ class JournalEntry(Base):
     source: Mapped[str] = mapped_column(String(40), default="manual")
     memo: Mapped[str] = mapped_column(String(500), default="")
     created_by: Mapped[str] = mapped_column(String(80), default="system")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     is_adjusting: Mapped[bool] = mapped_column(Boolean, default=False)
     status: Mapped[str] = mapped_column(String(32), default="posted")
 
@@ -168,7 +172,7 @@ class Document(Base):
     related_entity_id: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
     period: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
     tags: Mapped[Optional[list]] = mapped_column(JSON, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
 class AnomalyFlag(Base):
@@ -184,7 +188,7 @@ class AnomalyFlag(Base):
     evidence: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     status: Mapped[str] = mapped_column(String(32), default="open")
     is_ground_truth: Mapped[bool] = mapped_column(Boolean, default=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
 class ReconciliationResult(Base):
@@ -200,7 +204,7 @@ class ReconciliationResult(Base):
     reasons: Mapped[Optional[list]] = mapped_column(JSON, nullable=True)
     amount_diff: Mapped[float] = mapped_column(Float, default=0.0)
     date_diff_days: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
 class ApprovalRequest(Base):
@@ -219,7 +223,7 @@ class ApprovalRequest(Base):
     requested_by: Mapped[str] = mapped_column(String(80), default="agent")
     reviewed_by: Mapped[Optional[str]] = mapped_column(String(80), nullable=True)
     review_note: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     reviewed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     executed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
@@ -236,7 +240,7 @@ class AuditLog(Base):
     message: Mapped[str] = mapped_column(Text)
     details: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     duration_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
 
 
 class WorkflowRun(Base):
@@ -256,7 +260,7 @@ class WorkflowRun(Base):
     approval_request_id: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
     latency_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     estimated_cost_usd: Mapped[float] = mapped_column(Float, default=0.0)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
 

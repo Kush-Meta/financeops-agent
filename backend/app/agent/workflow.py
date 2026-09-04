@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import time
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Optional
 
 from sqlalchemy.orm import Session
@@ -230,7 +230,7 @@ def run_investigation(
     run.approval_request_id = approval_request_id
     run.latency_ms = latency_ms
     run.estimated_cost_usd = 0.002 if plan.get("planner") == "llm" else 0.0
-    run.completed_at = datetime.utcnow()
+    run.completed_at = datetime.now(timezone.utc).replace(tzinfo=None)
     db.commit()
 
     write_audit(
