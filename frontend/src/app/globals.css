@@ -45,7 +45,7 @@ body {
 }
 .prose-finance p,
 .prose-finance li {
-  @apply text-sm leading-relaxed text-[var(--ink)]/90;
+  @apply text-sm leading-relaxed text-[var(--ink)] opacity-90;
 }
 .prose-finance ul {
   @apply my-2 list-disc space-y-1 pl-5;

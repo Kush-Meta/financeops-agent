@@ -1,5 +1,9 @@
 # Architecture — FinanceOps Agent
 
+> Prefer the narrative design doc: **[DESIGN.md](DESIGN.md)** (architecture, algorithms, HITL, eval, production posture).
+
+This file is a short module map for contributors.
+
 ## Principle
 
 Use the LLM (optional) to understand requests, plan investigations, and explain findings.

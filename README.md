@@ -1,6 +1,15 @@
 # FinanceOps Agent
 
-AI-powered finance operations system for investigating, reconciling, and explaining accounting issues — with deterministic tools for the math and a human approval gate for sensitive actions.
+**Deterministic tools do the math. The agent plans and explains. Humans approve anything that mutates the books.**
+
+AI-powered finance operations system for investigating, reconciling, and explaining accounting issues — with an auditable, human-controlled workflow.
+
+> **Start here:** the full design narrative, architecture, reconciliation algorithm, HITL model, and evaluation results live in **[docs/DESIGN.md](docs/DESIGN.md)**.
+
+[![Python 3.12](https://img.shields.io/badge/python-3.12-0f6b4c?style=flat-square)](#)
+[![Next.js](https://img.shields.io/badge/Next.js-15-0f6b4c?style=flat-square)](#)
+[![Eval](https://img.shields.io/badge/recon_precision-0.93-1f7a4c?style=flat-square)](docs/DESIGN.md#13-evaluation-methodology)
+[![Safety](https://img.shields.io/badge/mutations-human_approval-a15c07?style=flat-square)](docs/DESIGN.md#11-human-in-the-loop-model)
 
 ## Business problem
 
