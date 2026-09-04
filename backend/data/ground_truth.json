@@ -1,0 +1,309 @@
+{
+  "recon_expected": {
+    "matched": [
+      {
+        "bank_txn_id": 1,
+        "invoice": "INV-1001",
+        "journal_line_id": 3
+      },
+      {
+        "bank_txn_id": 2,
+        "invoice": "INV-1002",
+        "journal_line_id": 7
+      },
+      {
+        "bank_txn_id": 3,
+        "invoice": "INV-1003",
+        "journal_line_id": 11
+      },
+      {
+        "bank_txn_id": 4,
+        "invoice": "INV-1004",
+        "journal_line_id": 15
+      },
+      {
+        "bank_txn_id": 5,
+        "invoice": "INV-1005",
+        "journal_line_id": 19
+      },
+      {
+        "bank_txn_id": 6,
+        "invoice": "INV-1006",
+        "journal_line_id": 23
+      },
+      {
+        "bank_txn_id": 7,
+        "invoice": "INV-1007",
+        "journal_line_id": 27
+      },
+      {
+        "bank_txn_id": 8,
+        "invoice": "INV-1008",
+        "journal_line_id": 31
+      },
+      {
+        "bank_txn_id": 9,
+        "invoice": "INV-1009",
+        "journal_line_id": 35
+      },
+      {
+        "bank_txn_id": 10,
+        "invoice": "INV-1010",
+        "journal_line_id": 39
+      },
+      {
+        "bank_txn_id": 11,
+        "invoice": "AR-1011",
+        "journal_line_id": 41
+      },
+      {
+        "bank_txn_id": 12,
+        "invoice": "AR-1012",
+        "journal_line_id": 43
+      },
+      {
+        "bank_txn_id": 13,
+        "invoice": "AR-1013",
+        "journal_line_id": 45
+      },
+      {
+        "bank_txn_id": 14,
+        "invoice": "AR-1014",
+        "journal_line_id": 47
+      },
+      {
+        "bank_txn_id": 15,
+        "invoice": "AR-1015",
+        "journal_line_id": 49
+      },
+      {
+        "bank_txn_id": 16,
+        "invoice": "INV-1016",
+        "journal_line_id": 53
+      },
+      {
+        "bank_txn_id": 17,
+        "invoice": "INV-1017",
+        "journal_line_id": 57
+      },
+      {
+        "bank_txn_id": 18,
+        "invoice": "INV-1018",
+        "journal_line_id": 61
+      },
+      {
+        "bank_txn_id": 19,
+        "invoice": "INV-1019",
+        "journal_line_id": 65
+      },
+      {
+        "bank_txn_id": 20,
+        "invoice": "INV-1020",
+        "journal_line_id": 69
+      },
+      {
+        "bank_txn_id": 21,
+        "invoice": "INV-1021",
+        "journal_line_id": 73
+      },
+      {
+        "bank_txn_id": 22,
+        "invoice": "INV-1022",
+        "journal_line_id": 77
+      },
+      {
+        "bank_txn_id": 23,
+        "invoice": "INV-1023",
+        "journal_line_id": 81
+      },
+      {
+        "bank_txn_id": 24,
+        "invoice": "INV-1024",
+        "journal_line_id": 85
+      },
+      {
+        "bank_txn_id": 25,
+        "invoice": "INV-1025",
+        "journal_line_id": 89
+      },
+      {
+        "bank_txn_id": 26,
+        "invoice": "AR-1026",
+        "journal_line_id": 91
+      },
+      {
+        "bank_txn_id": 27,
+        "invoice": "AR-1027",
+        "journal_line_id": 93
+      },
+      {
+        "bank_txn_id": 28,
+        "invoice": "AR-1028",
+        "journal_line_id": 95
+      },
+      {
+        "bank_txn_id": 29,
+        "invoice": "AR-1029",
+        "journal_line_id": 97
+      },
+      {
+        "bank_txn_id": 30,
+        "invoice": "AR-1030",
+        "journal_line_id": 99
+      },
+      {
+        "bank_txn_id": 31,
+        "invoice": "INV-1031",
+        "journal_line_id": 103
+      },
+      {
+        "bank_txn_id": 32,
+        "invoice": "INV-1032",
+        "journal_line_id": 107
+      },
+      {
+        "bank_txn_id": 33,
+        "invoice": "INV-1033",
+        "journal_line_id": 111
+      },
+      {
+        "bank_txn_id": 34,
+        "invoice": "INV-1034",
+        "journal_line_id": 115
+      },
+      {
+        "bank_txn_id": 35,
+        "invoice": "INV-1035",
+        "journal_line_id": 119
+      },
+      {
+        "bank_txn_id": 36,
+        "invoice": "INV-1036",
+        "journal_line_id": 123
+      },
+      {
+        "bank_txn_id": 37,
+        "invoice": "INV-1037",
+        "journal_line_id": 127
+      },
+      {
+        "bank_txn_id": 38,
+        "invoice": "INV-1038",
+        "journal_line_id": 131
+      },
+      {
+        "bank_txn_id": 39,
+        "invoice": "INV-1039",
+        "journal_line_id": 135
+      },
+      {
+        "bank_txn_id": 40,
+        "invoice": "INV-1040",
+        "journal_line_id": 139
+      },
+      {
+        "bank_txn_id": 41,
+        "invoice": "AR-1041",
+        "journal_line_id": 141
+      },
+      {
+        "bank_txn_id": 42,
+        "invoice": "AR-1042",
+        "journal_line_id": 143
+      },
+      {
+        "bank_txn_id": 43,
+        "invoice": "AR-1043",
+        "journal_line_id": 145
+      },
+      {
+        "bank_txn_id": 44,
+        "invoice": "AR-1044",
+        "journal_line_id": 147
+      },
+      {
+        "bank_txn_id": 45,
+        "invoice": "AR-1045",
+        "journal_line_id": 149
+      }
+    ],
+    "probable": [
+      {
+        "bank_txn_id": 48,
+        "journal_line_id": 153
+      }
+    ],
+    "unmatched_bank": [
+      {
+        "bank_txn_id": 46,
+        "reason": "deposit_in_transit"
+      },
+      {
+        "journal_line_id": 151,
+        "reason": "outstanding_check_not_cleared",
+        "amount": 22000.0
+      },
+      {
+        "bank_txn_id": 47,
+        "reason": "unrecorded_receipt"
+      }
+    ],
+    "needs_review": [
+      {
+        "bank_txn_id": 49,
+        "reason": "unusual_vendor_weekend_large_round"
+      }
+    ]
+  },
+  "anomaly_ids": [
+    {
+      "entity_type": "bank_transaction",
+      "entity_id": "49",
+      "anomaly_type": "weekend_entry"
+    },
+    {
+      "entity_type": "bank_transaction",
+      "entity_id": "49",
+      "anomaly_type": "unusual_vendor"
+    },
+    {
+      "entity_type": "bank_transaction",
+      "entity_id": "49",
+      "anomaly_type": "rounded_amount"
+    },
+    {
+      "entity_type": "invoice",
+      "entity_id": "46",
+      "anomaly_type": "duplicate_invoice"
+    },
+    {
+      "entity_type": "journal_entry",
+      "entity_id": "78",
+      "anomaly_type": "weekend_entry"
+    },
+    {
+      "entity_type": "account_balance",
+      "entity_id": "5400:2024-08",
+      "anomaly_type": "expense_spike"
+    }
+  ],
+  "bank_vs_ledger_gap": {
+    "period": "2024-08",
+    "account": "1000",
+    "expected_gap": 82000.0,
+    "components": [
+      {
+        "type": "deposit_in_transit",
+        "amount": 45000.0
+      },
+      {
+        "type": "outstanding_check",
+        "amount": 22000.0
+      },
+      {
+        "type": "unrecorded_bank_receipt",
+        "amount": 15000.0
+      }
+    ]
+  }
+}

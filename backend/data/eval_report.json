@@ -1,0 +1,47 @@
+{
+  "reconciliation": {
+    "precision": 0.9286,
+    "recall": 0.8667,
+    "tp": 13,
+    "fp": 1,
+    "fn": 2,
+    "gap_abs_error": 0.5,
+    "calculation_accuracy": true
+  },
+  "anomaly_detection": {
+    "ground_truth_hits": 6,
+    "ground_truth_total": 6,
+    "type_recall": 1.0,
+    "precision_proxy": 0.2727
+  },
+  "agent": {
+    "tool_selection_accuracy": 1.0,
+    "task_completion_rate": 1.0,
+    "avg_latency_ms": 69.22,
+    "avg_cost_usd": 0.0,
+    "avg_unsupported_claim_rate": 0.0,
+    "tasks": [
+      {
+        "id": "bank_gap",
+        "tool_selection_ok": true,
+        "completed": true,
+        "latency_ms": 135.21,
+        "unsupported_claim_rate": 0.0
+      },
+      {
+        "id": "variances",
+        "tool_selection_ok": true,
+        "completed": true,
+        "latency_ms": 36.29,
+        "unsupported_claim_rate": 0.0
+      },
+      {
+        "id": "anomalies",
+        "tool_selection_ok": true,
+        "completed": true,
+        "latency_ms": 36.16,
+        "unsupported_claim_rate": 0.0
+      }
+    ]
+  }
+}

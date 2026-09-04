@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #12201c;
+  --muted: #5b6b64;
+  --panel: #f3f6f2;
+  --surface: #ffffff;
+  --surface-2: #e7eee8;
+  --border: #cfdad2;
+  --accent: #0f6b4c;
+  --accent-fg: #f4fbf7;
+  --accent-soft: #d7eee3;
+  --danger: #b42318;
+  --success: #1f7a4c;
+  --warn: #a15c07;
+  --bg1: #eef3ef;
+  --bg2: #dce8df;
+  --highlight: #c8a24a;
+}
+
+body {
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 500px at 10% -10%, #d9ebe1 0%, transparent 55%),
+    radial-gradient(900px 400px at 100% 0%, #e7efd8 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+  min-height: 100vh;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(18, 32, 28, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(18, 32, 28, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(180deg, #000 30%, transparent 100%);
+}
+
+.prose-finance h2 {
+  @apply mt-4 mb-2 font-display text-xl text-[var(--ink)];
+}
+.prose-finance h3 {
+  @apply mt-3 mb-1 text-sm font-semibold uppercase tracking-wide text-[var(--muted)];
+}
+.prose-finance p,
+.prose-finance li {
+  @apply text-sm leading-relaxed text-[var(--ink)]/90;
+}
+.prose-finance ul {
+  @apply my-2 list-disc space-y-1 pl-5;
+}
+.prose-finance strong {
+  @apply font-semibold text-[var(--ink)];
+}
+.prose-finance code {
+  @apply rounded bg-[var(--surface-2)] px-1 py-0.5 text-xs;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-rise {
+  animation: rise 0.45s ease-out both;
+}
+.animate-rise-delay {
+  animation: rise 0.55s ease-out 0.08s both;
+}
+.animate-rise-delay-2 {
+  animation: rise 0.6s ease-out 0.16s both;
+}
