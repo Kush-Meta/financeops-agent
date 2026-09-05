@@ -286,6 +286,43 @@ class WorkflowRun(Base):
     completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
 
+
+
+class Organization(Base):
+    """Lightweight tenant. Demo ships org_demo + org_acme."""
+
+    __tablename__ = "organizations"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    org_id: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(200))
+    plan: Mapped[str] = mapped_column(String(40), default="demo")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class ConnectorSyncRun(Base):
+    """Nightly / on-demand bank-feed (or ERP) sync receipt."""
+
+    __tablename__ = "connector_sync_runs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    run_id: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    org_id: Mapped[str] = mapped_column(String(64), index=True, default="org_demo")
+    connector: Mapped[str] = mapped_column(String(64), index=True)
+    # sandbox_bank_feed | plaid_sandbox | qbo_bank | csv_drop
+    status: Mapped[str] = mapped_column(String(32), default="running", index=True)
+    # running | succeeded | failed | partial
+    trigger: Mapped[str] = mapped_column(String(32), default="manual")
+    # manual | schedule | webhook
+    records_fetched: Mapped[int] = mapped_column(Integer, default=0)
+    records_created: Mapped[int] = mapped_column(Integer, default=0)
+    records_skipped: Mapped[int] = mapped_column(Integer, default=0)
+    cursor: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
+    error: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    details: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
+    started_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    finished_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+
 # Resolve forward refs for Invoice.document
 from typing import TYPE_CHECKING  # noqa: E402
 

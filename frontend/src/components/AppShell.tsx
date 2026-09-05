@@ -12,9 +12,10 @@ import {
   Scale,
   ShieldAlert,
   Upload,
+  Cable,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getApiKey, setApiKey } from "@/lib/api";
+import { getApiKey, setApiKey, getOrgId, setOrgId } from "@/lib/api";
 
 const links = [
   { href: "/", label: "Overview", icon: LayoutDashboard },
@@ -24,6 +25,7 @@ const links = [
   { href: "/approvals", label: "Approvals", icon: GitCompare },
   { href: "/audit", label: "Audit trail", icon: Activity },
   { href: "/imports", label: "Imports", icon: Upload },
+  { href: "/connectors", label: "Connectors", icon: Cable },
   { href: "/records", label: "Records", icon: FileSearch },
 ];
 
@@ -37,9 +39,11 @@ const ROLES = [
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [roleKey, setRoleKey] = useState("fo_controller_dev");
+  const [orgId, setOrgIdState] = useState("org_demo");
 
   useEffect(() => {
     setRoleKey(getApiKey() || "fo_controller_dev");
+    setOrgIdState(getOrgId() || "org_demo");
   }, []);
 
   return (
@@ -92,7 +96,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             ))}
           </select>
           <p className="mt-2 text-[10px] leading-snug text-[var(--muted)]">
-            Demo API keys map to roles. Enable AUTH_ENABLED on the API for enforcement.
+Demo API keys map to roles. Enable AUTH_ENABLED on the API for enforcement.
+          </p>
+          <label className="mt-4 text-[10px] uppercase tracking-wide text-[var(--muted)]">
+            Tenant
+          </label>
+          <select
+            className="mt-1 w-full rounded-md border border-[var(--border)] bg-[var(--surface)] px-2 py-1.5 text-xs"
+            value={orgId}
+            onChange={(e) => {
+              setOrgIdState(e.target.value);
+              setOrgId(e.target.value);
+            }}
+          >
+            <option value="org_demo">org_demo — FinanceOps Demo</option>
+            <option value="org_acme">org_acme — Acme Industrial</option>
+          </select>
+          <p className="mt-2 text-[10px] leading-snug text-[var(--muted)]">
+            X-Org-Id scopes connector sync cursors (demo tenancy).
           </p>
         </div>
       </aside>

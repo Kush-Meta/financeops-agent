@@ -61,3 +61,6 @@ harden before a production cutover.
 - No GL mutation occurs without an approval record in the audit chain.
 - Recon precision on the labeled pack stays above the CI gate.
 
+## Security diligence
+
+See [THREAT_MODEL.md](THREAT_MODEL.md) for trust boundaries, refuse-to-auto-post rules, and cutover checklist.

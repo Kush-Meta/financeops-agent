@@ -27,6 +27,12 @@ class Settings(BaseSettings):
 
     auth_enabled: bool = False
     admin_api_key_hash: str = ""
+    auth_provider: str = "demo"  # demo | clerk
+    clerk_jwks_url: str = ""
+    clerk_issuer: str = ""
+    connector_schedule_enabled: bool = False
+    connector_schedule_seconds: int = 86400
+    default_org_id: str = "org_demo"
 
     maker_checker_enabled: bool = True
     maker_checker_amount_threshold: float = 10000.0

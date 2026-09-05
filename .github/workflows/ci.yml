@@ -39,6 +39,18 @@ jobs:
           assert agent["avg_unsupported_claim_rate"] <= 0.15, agent
           print("eval gates passed", {k: recon[k] for k in ("precision","recall")}, agent["tool_selection_accuracy"])
           PY
+      - name: Historic case eval gate
+        run: |
+          uv run python -m eval.run_case_eval
+          uv run python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("eval/case_eval_report.json").read_text())
+          assert report["pass"] is True, report
+          assert report["gap"]["pass"] is True, report["gap"]
+          assert report["breaks"]["detected"] == report["breaks"]["total"], report["breaks"]
+          print("case eval gate passed", report["case_id"], report["gap"]["actual"])
+          PY
 
   frontend:
     runs-on: ubuntu-latest

@@ -42,11 +42,46 @@ def _ensure_seeded() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    import asyncio
+
     settings = get_settings()
     setup_logging(settings.log_level)
     Path(settings.documents_dir).mkdir(parents=True, exist_ok=True)
     _ensure_seeded()
+
+    stop = asyncio.Event()
+
+    async def _nightly_bank_feed() -> None:
+        """Optional in-process stand-in for an external cron hitting the sync API."""
+        if not getattr(settings, "connector_schedule_enabled", False):
+            return
+        interval = max(60, int(getattr(settings, "connector_schedule_seconds", 86400)))
+        while not stop.is_set():
+            try:
+                from app.connectors.sandbox_bank import sync_sandbox_bank_feed
+                from app.core.database import SessionLocal
+
+                db = SessionLocal()
+                try:
+                    sync_sandbox_bank_feed(
+                        db,
+                        org_id=getattr(settings, "default_org_id", "org_demo"),
+                        trigger="schedule",
+                        batch_size=3,
+                    )
+                finally:
+                    db.close()
+            except Exception:  # noqa: BLE001
+                pass
+            try:
+                await asyncio.wait_for(stop.wait(), timeout=interval)
+            except asyncio.TimeoutError:
+                continue
+
+    task = asyncio.create_task(_nightly_bank_feed())
     yield
+    stop.set()
+    task.cancel()
 
 
 def create_app() -> FastAPI:

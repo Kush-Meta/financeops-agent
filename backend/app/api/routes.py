@@ -20,6 +20,9 @@ from app.adapters.persist import (
 )
 from app.api.schemas import AnomalyRequest, ApprovalDecision, AskRequest, HealthResponse, ReconcileRequest
 from app.core.auth import Principal, get_principal, require_role
+from app.core.tenancy import get_org_id
+from app.connectors.sandbox_bank import ensure_demo_orgs, sync_sandbox_bank_feed
+from app.models import ConnectorSyncRun, Organization
 from app.core.config import get_settings
 from app.core.database import get_db
 from app.models import (
@@ -424,6 +427,98 @@ def list_imports(db: Session = Depends(get_db)) -> list[dict]:
         for r in rows
     ]
 
+
+
+
+@router.get("/orgs")
+def list_orgs(db: Session = Depends(get_db)) -> list[dict]:
+    ensure_demo_orgs(db)
+    rows = db.execute(select(Organization).order_by(Organization.org_id)).scalars().all()
+    return [{"org_id": r.org_id, "name": r.name, "plan": r.plan} for r in rows]
+
+
+@router.get("/connectors")
+def list_connectors(org_id: str = Depends(get_org_id)) -> list[dict]:
+    """Catalog of customer-shaped connectors (sandbox until credentials wired)."""
+    return [
+        {
+            "id": "sandbox_bank_feed",
+            "name": "Operating bank feed (sandbox)",
+            "provider_shape": "Plaid Transactions / QBO BankTransactions",
+            "status": "ready",
+            "org_id": org_id,
+            "supports_schedule": True,
+            "docs": "POST /api/connectors/bank-feed/sync — advances cursor each run",
+        },
+        {
+            "id": "plaid_sandbox",
+            "name": "Plaid sandbox",
+            "provider_shape": "Plaid API",
+            "status": "needs_credentials",
+            "org_id": org_id,
+            "env": ["PLAID_CLIENT_ID", "PLAID_SECRET", "PLAID_ENV=sandbox"],
+        },
+        {
+            "id": "qbo_bank",
+            "name": "QuickBooks Online bank txn pull",
+            "provider_shape": "QBO Accounting API",
+            "status": "needs_credentials",
+            "org_id": org_id,
+            "env": ["QBO_CLIENT_ID", "QBO_CLIENT_SECRET", "QBO_REALM_ID", "QBO_REFRESH_TOKEN"],
+        },
+    ]
+
+
+@router.post("/connectors/bank-feed/sync")
+def connector_bank_feed_sync(
+    trigger: str = Query("manual"),
+    batch_size: int = Query(3, ge=1, le=50),
+    db: Session = Depends(get_db),
+    principal: Principal = Depends(require_role("admin")),
+    org_id: str = Depends(get_org_id),
+) -> dict:
+    """Run one bank-feed sync for the active org (nightly-job shaped)."""
+    result = sync_sandbox_bank_feed(
+        db, org_id=org_id, trigger=trigger, batch_size=batch_size
+    )
+    return {"status": "ok", "triggered_by": principal.name, **result}
+
+
+@router.get("/connectors/syncs")
+def list_connector_syncs(
+    limit: int = Query(20, ge=1, le=100),
+    db: Session = Depends(get_db),
+    org_id: str = Depends(get_org_id),
+) -> list[dict]:
+    ensure_demo_orgs(db)
+    rows = (
+        db.execute(
+            select(ConnectorSyncRun)
+            .where(ConnectorSyncRun.org_id == org_id)
+            .order_by(desc(ConnectorSyncRun.started_at))
+            .limit(limit)
+        )
+        .scalars()
+        .all()
+    )
+    return [
+        {
+            "run_id": r.run_id,
+            "org_id": r.org_id,
+            "connector": r.connector,
+            "status": r.status,
+            "trigger": r.trigger,
+            "records_fetched": r.records_fetched,
+            "records_created": r.records_created,
+            "records_skipped": r.records_skipped,
+            "cursor": r.cursor,
+            "error": r.error,
+            "details": r.details,
+            "started_at": r.started_at.isoformat() if r.started_at else None,
+            "finished_at": r.finished_at.isoformat() if r.finished_at else None,
+        }
+        for r in rows
+    ]
 
 @router.get("/audit/chain/verify")
 def audit_chain_verify(db: Session = Depends(get_db)) -> dict:

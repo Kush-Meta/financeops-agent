@@ -13,12 +13,25 @@ export function setApiKey(key: string) {
   window.localStorage.setItem(API_KEY_STORAGE, key);
 }
 
+const ORG_STORAGE = "financeops_org_id";
+
+export function getOrgId(): string {
+  if (typeof window === "undefined") return "org_demo";
+  return window.localStorage.getItem(ORG_STORAGE) || "org_demo";
+}
+
+export function setOrgId(orgId: string) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(ORG_STORAGE, orgId);
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
       "X-API-Key": getApiKey(),
+      "X-Org-Id": getOrgId(),
       ...(init?.headers || {}),
     },
     cache: "no-store",
@@ -110,6 +123,14 @@ export const api = {
   historicCases: () => request<HistoricCase[]>("/imports/historic-cases"),
   importHistoricCase: (caseId: string) =>
     request<ImportResult>(`/imports/historic-case/${caseId}`, { method: "POST", body: "{}" }),
+  orgs: () => request<Org[]>("/orgs"),
+  connectors: () => request<ConnectorInfo[]>("/connectors"),
+  connectorSyncs: () => request<ConnectorSync[]>("/connectors/syncs"),
+  bankFeedSync: (batchSize = 3) =>
+    request<ConnectorSyncResult>(`/connectors/bank-feed/sync?trigger=manual&batch_size=${batchSize}`, {
+      method: "POST",
+      body: "{}",
+    }),
   importRealPublic: () =>
     request<ImportResult>("/imports/real-public", { method: "POST", body: "{}" }),
   importCsvFiles: async (files: File[]) => {
@@ -239,4 +260,37 @@ export type HistoricCase = {
   period?: string;
   expected_bank_minus_ledger?: number;
   demo_script?: string[];
+};
+
+
+export type Org = { org_id: string; name: string; plan: string };
+export type ConnectorInfo = {
+  id: string;
+  name: string;
+  provider_shape: string;
+  status: string;
+  org_id: string;
+  supports_schedule?: boolean;
+  docs?: string;
+  env?: string[];
+};
+export type ConnectorSync = {
+  run_id: string;
+  org_id: string;
+  connector: string;
+  status: string;
+  trigger: string;
+  records_fetched: number;
+  records_created: number;
+  records_skipped: number;
+  cursor: string | null;
+  error: string | null;
+  details: Record<string, unknown> | null;
+  started_at: string | null;
+  finished_at: string | null;
+};
+export type ConnectorSyncResult = ConnectorSync & {
+  exhausted?: boolean;
+  triggered_by?: string;
+  status: string;
 };

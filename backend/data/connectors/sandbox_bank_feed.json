@@ -1,0 +1,163 @@
+{
+  "provider": "sandbox_bank_feed",
+  "version": "2024.10",
+  "description": "Plaid/QBO-shaped sandbox transactions. Each sync advances a cursor by batch_size.",
+  "transactions": [
+    {
+      "transaction_id": "sandbox_txn_0001",
+      "date": "2024-10-01",
+      "amount": -12800,
+      "name": "ACH HELM PRECISION",
+      "merchant_name": "Helm Precision",
+      "payment_channel": "ach",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0001"
+      },
+      "pending": false
+    },
+    {
+      "transaction_id": "sandbox_txn_0002",
+      "date": "2024-10-02",
+      "amount": -4200,
+      "name": "WIRE ORBIT FREIGHT",
+      "merchant_name": "Orbit Logistics",
+      "payment_channel": "wire",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0002"
+      },
+      "pending": false
+    },
+    {
+      "transaction_id": "sandbox_txn_0003",
+      "date": "2024-10-03",
+      "amount": 92000,
+      "name": "WIRE IN EASTBAY MFG",
+      "merchant_name": "Eastbay Manufacturing",
+      "payment_channel": "wire",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0003"
+      },
+      "pending": false
+    },
+    {
+      "transaction_id": "sandbox_txn_0004",
+      "date": "2024-10-04",
+      "amount": -2500,
+      "name": "ACH NIMBUS SaaS",
+      "merchant_name": "Nimbus Compute",
+      "payment_channel": "ach",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0004"
+      },
+      "pending": false
+    },
+    {
+      "transaction_id": "sandbox_txn_0005",
+      "date": "2024-10-05",
+      "amount": 44100,
+      "name": "ACH CANYON SOFTWARE",
+      "merchant_name": "Canyon Software",
+      "payment_channel": "ach",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0005"
+      },
+      "pending": false
+    },
+    {
+      "transaction_id": "sandbox_txn_0006",
+      "date": "2024-10-06",
+      "amount": -35,
+      "name": "WIRE FEE INTERNATIONAL",
+      "merchant_name": "First National Bank",
+      "payment_channel": "fee",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0006"
+      },
+      "pending": false
+    },
+    {
+      "transaction_id": "sandbox_txn_0007",
+      "date": "2024-10-07",
+      "amount": -18750,
+      "name": "ACH NEXUS GAS",
+      "merchant_name": "Nexus Industrial",
+      "payment_channel": "ach",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0007"
+      },
+      "pending": false
+    },
+    {
+      "transaction_id": "sandbox_txn_0008",
+      "date": "2024-10-08",
+      "amount": 175000,
+      "name": "WIRE BLUEHARBOR",
+      "merchant_name": "BlueHarbor Hospitals",
+      "payment_channel": "wire",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0008"
+      },
+      "pending": false
+    },
+    {
+      "transaction_id": "sandbox_txn_0009",
+      "date": "2024-10-09",
+      "amount": -9500,
+      "name": "CHECK 5521 OFFICE LEASE",
+      "merchant_name": "Harbor Property",
+      "payment_channel": "check",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0009"
+      },
+      "pending": false
+    },
+    {
+      "transaction_id": "sandbox_txn_0010",
+      "date": "2024-10-10",
+      "amount": 28000,
+      "name": "ACH DRIFTWOOD HOTELS",
+      "merchant_name": "Driftwood Hotels",
+      "payment_channel": "ach",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0010"
+      },
+      "pending": false
+    },
+    {
+      "transaction_id": "sandbox_txn_0011",
+      "date": "2024-10-11",
+      "amount": -6100,
+      "name": "ACH CYBERSHIELD",
+      "merchant_name": "CyberShield Inc",
+      "payment_channel": "ach",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0011"
+      },
+      "pending": false
+    },
+    {
+      "transaction_id": "sandbox_txn_0012",
+      "date": "2024-10-12",
+      "amount": 51000,
+      "name": "WIRE EASTBAY PO-990",
+      "merchant_name": "Eastbay Manufacturing",
+      "payment_channel": "wire",
+      "iso_currency_code": "USD",
+      "payment_meta": {
+        "reference": "SBX-0012"
+      },
+      "pending": false
+    }
+  ]
+}

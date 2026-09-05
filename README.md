@@ -81,6 +81,36 @@ For a durable URL, connect this repo to [Render](https://render.com) / [Railway]
 
 
 
+
+
+## Production-shaped standouts
+
+### 1. Connectors (nightly bank feed)
+
+`POST /api/connectors/bank-feed/sync` advances a **cursored sandbox feed** (Plaid/QBO-shaped JSON) and writes `ConnectorSyncRun` receipts per tenant (`X-Org-Id`). UI: **Connectors**.
+
+```bash
+# as admin
+curl -X POST 'http://127.0.0.1:8765/api/connectors/bank-feed/sync?batch_size=3' \
+  -H 'X-API-Key: fo_admin_dev' -H 'X-Org-Id: org_demo'
+```
+
+Set `CONNECTOR_SCHEDULE_ENABLED=true` to run the same job in-process on an interval, or hit the endpoint from Render/GitHub cron.
+
+Real Plaid/QBO: provide credentials (see Connectors page) — sync receipt schema stays identical.
+
+### 2. Durable public demo
+
+One-click: connect this repo to [Render](https://render.com) using [`render.yaml`](render.yaml). After deploy, set `CORS_ORIGINS` to the web service URL.
+
+### 3. Diligence posture
+
+- CI gates: recon eval **and** historic case eval (`aether_2018q3`)
+- Tenant header + org-scoped sync cursors
+- Optional `AUTH_PROVIDER=clerk` hook (JWKS)
+- Threat model: [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)
+
+
 ## Retrospective proof pack (the “would this have caught it?” demo)
 
 We ship a **labeled historic reconstruction** — not a scraped confidential GL — so anyone can reproduce the claim:
