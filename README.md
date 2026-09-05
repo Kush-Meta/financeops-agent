@@ -4,7 +4,7 @@
 
 AI-powered finance operations system for investigating, reconciling, and explaining accounting issues — with an auditable, human-controlled workflow.
 
-> **Start here:** the full design narrative, architecture, reconciliation algorithm, HITL model, and evaluation results live in **[docs/DESIGN.md](docs/DESIGN.md)**. Customer landing notes: **[docs/CUSTOMER_DEPLOYMENT.md](docs/CUSTOMER_DEPLOYMENT.md)**..
+> **Start here:** the full design narrative, architecture, reconciliation algorithm, HITL model, and evaluation results live in **[docs/DESIGN.md](docs/DESIGN.md)**. Customer landing notes: **[docs/CUSTOMER_DEPLOYMENT.md](docs/CUSTOMER_DEPLOYMENT.md)**. Historic proof pack: **[docs/CASES.md](docs/CASES.md)**.
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-0f6b4c?style=flat-square)](#)
 [![Next.js](https://img.shields.io/badge/Next.js-15-0f6b4c?style=flat-square)](#)
@@ -78,6 +78,35 @@ Public tunnel (ephemeral while this Cloud Agent session is up):
 3. Open **Investigate** and ask why September cash does not match the bank
 
 For a durable URL, connect this repo to [Render](https://render.com) / [Railway](https://railway.app) using `docker-compose.yml` (Postgres + API + web). Set `NEXT_PUBLIC_API_URL=/api`, `API_PROXY_TARGET=http://api:8765`, `AUTH_ENABLED=true`, and `CORS_ORIGINS` to your web origin. See [docs/CUSTOMER_DEPLOYMENT.md](docs/CUSTOMER_DEPLOYMENT.md).
+
+
+
+## Retrospective proof pack (the “would this have caught it?” demo)
+
+We ship a **labeled historic reconstruction** — not a scraped confidential GL — so anyone can reproduce the claim:
+
+> Load Aether Dynamics Q3 2018 → reconcile `2018-09` → bank−ledger lands at **−$2,440,035** → investigate surfaces phantom affiliate cash, period-end cut-off, and an unrecorded fee.
+
+| | |
+|---|---|
+| **Narrative + methodology** | [docs/CASES.md](docs/CASES.md) |
+| **Data pack** | `backend/data/cases/aether_2018q3/` |
+| **API** | `POST /api/imports/historic-case/aether_2018q3` |
+| **Eval gate** | `uv run python -m eval.run_case_eval` |
+
+```bash
+# Backend
+curl -X POST http://127.0.0.1:8765/api/imports/historic-case/aether_2018q3 \
+  -H "X-API-Key: fo_admin_dev"
+curl -X POST http://127.0.0.1:8765/api/reconcile \
+  -H "X-API-Key: fo_controller_dev" -H "Content-Type: application/json" \
+  -d '{"period":"2018-09","persist":true}'
+
+# Eval (must pass)
+cd backend && uv run python -m eval.run_case_eval
+```
+
+**Honest framing:** synthetic amounts; break *patterns* from public SEC cash cut-off themes; USAspending recipient names used only as realistic counterparties. Details in the case writeup.
 
 ## Customer ERP / bank CSV integration
 

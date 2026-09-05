@@ -1,0 +1,31 @@
+entry_number,entry_date,account_code,debit,credit,memo,reference
+AE-JE-1801,2018-09-04,5000,128400.00,0,CNC housings lot H-18,AE-AP-1801
+AE-JE-1801,2018-09-04,2000,0,128400.00,CNC housings lot H-18,AE-AP-1801
+AE-JE-1802,2018-09-06,5900,41250.00,0,EU inbound freight week 36,AE-AP-1802
+AE-JE-1802,2018-09-06,2000,0,41250.00,EU inbound freight week 36,AE-AP-1802
+AE-JE-1803,2018-09-10,5700,18750.00,0,Specialty gas cylinders,AE-AP-1803
+AE-JE-1803,2018-09-10,2000,0,18750.00,Specialty gas cylinders,AE-AP-1803
+AE-JE-1804,2018-09-12,5100,250000.00,0,Latitude fleet refresh,AE-AP-1804
+AE-JE-1804,2018-09-12,2000,0,250000.00,Latitude fleet refresh,AE-AP-1804
+AE-JE-1805,2018-09-14,5500,95000.00,0,Distributed sensing research retainer,AE-AP-1805
+AE-JE-1805,2018-09-14,2000,0,95000.00,Distributed sensing research retainer,AE-AP-1805
+AE-JE-1811,2018-09-05,2000,128400.00,0,Pay Helm Precision,AE-AP-1801
+AE-JE-1811,2018-09-05,1000,0,128400.00,Pay Helm Precision,AE-AP-1801
+AE-JE-1812,2018-09-07,2000,41250.00,0,Pay Orbit Logistics,AE-AP-1802
+AE-JE-1812,2018-09-07,1000,0,41250.00,Pay Orbit Logistics,AE-AP-1802
+AE-JE-1813,2018-09-11,2000,18750.00,0,Pay Nexus Industrial,AE-AP-1803
+AE-JE-1813,2018-09-11,1000,0,18750.00,Pay Nexus Industrial,AE-AP-1803
+AE-JE-1814,2018-09-13,2000,250000.00,0,Pay Dell Federal,AE-AP-1804
+AE-JE-1814,2018-09-13,1000,0,250000.00,Pay Dell Federal,AE-AP-1804
+AE-JE-1815,2018-09-15,2000,95000.00,0,Pay UC Regents,AE-AP-1805
+AE-JE-1815,2018-09-15,1000,0,95000.00,Pay UC Regents,AE-AP-1805
+AE-JE-1821,2018-09-18,1000,860000.00,0,Eastbay Manufacturing receipt,INV-AR-441
+AE-JE-1821,2018-09-18,1100,0,860000.00,Eastbay Manufacturing receipt,INV-AR-441
+AE-JE-1822,2018-09-21,1000,420000.00,0,Canyon Software receipt,INV-AR-448
+AE-JE-1822,2018-09-21,1100,0,420000.00,Canyon Software receipt,INV-AR-448
+AE-JE-1823,2018-09-24,1000,175000.00,0,BlueHarbor Hospitals receipt,INV-AR-452
+AE-JE-1823,2018-09-24,1100,0,175000.00,BlueHarbor Hospitals receipt,INV-AR-452
+AE-JE-1890,2018-09-28,1000,2100000.00,0,Wire from Aether EU treasury - Q3 support (cash in transit),AE-PHANTOM-EU
+AE-JE-1890,2018-09-28,4000,0,2100000.00,Wire from Aether EU treasury - Q3 support (cash in transit),AE-PHANTOM-EU
+AE-JE-1891,2018-09-30,1000,340000.00,0,Collection Eastbay PO-441 booked at close,PO-441-CUTOFF
+AE-JE-1891,2018-09-30,1100,0,340000.00,Collection Eastbay PO-441 booked at close,PO-441-CUTOFF

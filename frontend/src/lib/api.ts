@@ -107,6 +107,9 @@ export const api = {
   imports: () => request<ImportBatch[]>("/imports"),
   importCustomerErp: () =>
     request<ImportResult>("/imports/customer-erp", { method: "POST", body: "{}" }),
+  historicCases: () => request<HistoricCase[]>("/imports/historic-cases"),
+  importHistoricCase: (caseId: string) =>
+    request<ImportResult>(`/imports/historic-case/${caseId}`, { method: "POST", body: "{}" }),
   importRealPublic: () =>
     request<ImportResult>("/imports/real-public", { method: "POST", body: "{}" }),
   importCsvFiles: async (files: File[]) => {
@@ -226,4 +229,14 @@ export type Approval = {
   workflow_id: string | null;
   review_note: string | null;
   created_at: string | null;
+};
+
+
+export type HistoricCase = {
+  case_id: string;
+  title?: string;
+  tagline?: string;
+  period?: string;
+  expected_bank_minus_ledger?: number;
+  demo_script?: string[];
 };

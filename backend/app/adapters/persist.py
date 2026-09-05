@@ -163,3 +163,10 @@ def import_customer_erp_data(db: Session, directory: Path | None = None) -> dict
 
     bundle = load_customer_erp_bundle(directory)
     return apply_adapter_result(db, bundle)
+
+
+def import_historic_case_data(db: Session, case_id: str = "aether_2018q3") -> dict:
+    from app.adapters.csv_erp import load_historic_case_bundle
+
+    bundle = load_historic_case_bundle(case_id)
+    return apply_adapter_result(db, bundle)

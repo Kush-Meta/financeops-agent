@@ -25,6 +25,7 @@ from app.adapters.base import (
     NormalizedInvoice,
     NormalizedJournalEntry,
     NormalizedJournalLine,
+    NormalizedDocument,
     NormalizedVendor,
 )
 from app.core.config import get_settings
@@ -311,4 +312,120 @@ def parse_upload_bundle(
         bank_txns=bank,
         journal_entries=journals,
         meta={"files": used, "upload": True},
+    )
+
+
+DEFAULT_CASES_DIR = BACKEND_DATA / "cases"
+
+
+def list_historic_cases(cases_dir: Optional[Path] = None) -> list[dict]:
+    """Return metadata for bundled retrospective case packs."""
+    root = Path(cases_dir) if cases_dir else DEFAULT_CASES_DIR
+    if not root.exists():
+        return []
+    out: list[dict] = []
+    for child in sorted(root.iterdir()):
+        if not child.is_dir():
+            continue
+        gt_path = child / "ground_truth.json"
+        meta: dict = {"case_id": child.name, "directory": str(child)}
+        if gt_path.exists():
+            import json
+
+            meta.update(json.loads(gt_path.read_text(encoding="utf-8")))
+        readme = child / "README.md"
+        if readme.exists() and "title" not in meta:
+            meta["title"] = readme.read_text(encoding="utf-8").splitlines()[0].lstrip("# ").strip()
+        out.append(meta)
+    return out
+
+
+def load_historic_case_bundle(case_id: str = "aether_2018q3", cases_dir: Optional[Path] = None) -> AdapterResult:
+    """Load a labeled historic retrospective pack (CSV + ground truth + brief)."""
+    import json
+
+    root = (Path(cases_dir) if cases_dir else DEFAULT_CASES_DIR) / case_id
+    if not root.exists():
+        raise FileNotFoundError(f"Historic case not found: {root}")
+
+    # Reuse the customer ERP CSV parsers against the case directory layout
+    vendors: list[NormalizedVendor] = []
+    invoices: list[NormalizedInvoice] = []
+    bank: list[NormalizedBankTxn] = []
+    journals: list[NormalizedJournalEntry] = []
+    documents: list[NormalizedDocument] = []
+    files_used: list[str] = []
+
+    mapping = [
+        ("vendors.csv", "vendors"),
+        ("ap_invoices.csv", "invoices"),
+        ("bank_transactions.csv", "bank"),
+        ("gl_journal.csv", "gl"),
+    ]
+    for filename, kind in mapping:
+        path = root / filename
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        files_used.append(filename)
+        if kind == "vendors":
+            vendors.extend(parse_vendors_csv(text))
+        elif kind == "invoices":
+            invoices.extend(parse_invoices_csv(text))
+        elif kind == "bank":
+            # Only keep September rows in the operating period for recon demos;
+            # October cutoff deposit remains in file for narrative evidence but
+            # is excluded from 2018-09 bank total via period filter in reconcile.
+            bank.extend(parse_bank_csv(text, source_system=f"case_{case_id}_bank"))
+        elif kind == "gl":
+            journals.extend(parse_gl_journal_csv(text))
+
+    gt_meta: dict = {}
+    gt_path = root / "ground_truth.json"
+    if gt_path.exists():
+        gt_meta = json.loads(gt_path.read_text(encoding="utf-8"))
+        files_used.append("ground_truth.json")
+
+    for doc_name in ("case_brief.md", "SOURCES.md"):
+        doc_path = root / doc_name
+        if not doc_path.exists():
+            continue
+        content = doc_path.read_text(encoding="utf-8")
+        documents.append(
+            NormalizedDocument(
+                doc_type="case_brief" if doc_name.startswith("case_") else "methodology",
+                title=f"{case_id} / {doc_name}",
+                filename=f"case_{case_id}_{doc_name}",
+                content=content,
+                period=gt_meta.get("period"),
+                tags=["historic_case", case_id, "retrospective"],
+                related_entity_type="case",
+                related_entity_id=case_id,
+            )
+        )
+        files_used.append(doc_name)
+
+    if not any([vendors, invoices, bank, journals]):
+        raise FileNotFoundError(f"No CSV data in historic case {root}")
+
+    return AdapterResult(
+        source=f"historic_case:{case_id}",
+        vendors=vendors,
+        invoices=invoices,
+        bank_txns=bank,
+        journal_entries=journals,
+        documents=documents,
+        meta={
+            "case_id": case_id,
+            "directory": str(root),
+            "files": files_used,
+            "ground_truth": gt_meta,
+            "counts": {
+                "vendors": len(vendors),
+                "invoices": len(invoices),
+                "bank_txns": len(bank),
+                "journal_entries": len(journals),
+                "documents": len(documents),
+            },
+        },
     )

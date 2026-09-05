@@ -1,18 +1,21 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { api, ImportBatch, ImportResult } from "@/lib/api";
+import { api, HistoricCase, ImportBatch, ImportResult } from "@/lib/api";
 
 export default function ImportsPage() {
   const [batches, setBatches] = useState<ImportBatch[]>([]);
+  const [cases, setCases] = useState<HistoricCase[]>([]);
   const [busy, setBusy] = useState<string | null>(null);
   const [result, setResult] = useState<ImportResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const refresh = useCallback(() => {
-    api
-      .imports()
-      .then(setBatches)
+    Promise.all([api.imports(), api.historicCases()])
+      .then(([b, c]) => {
+        setBatches(b);
+        setCases(c);
+      })
       .catch((e) => setError(e.message));
   }, []);
 
@@ -35,16 +38,54 @@ export default function ImportsPage() {
     }
   }
 
+  const aether = cases.find((c) => c.case_id === "aether_2018q3") || cases[0];
+
   return (
     <div className="space-y-8">
       <header>
         <h1 className="font-display text-3xl sm:text-4xl">Imports</h1>
         <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
-          Land customer ERP and bank CSVs the way a first engagement actually starts —
-          alias-tolerant column mapping, idempotent upserts, and an import batch audit row.
-          Switch to <span className="text-[var(--ink)]">Admin</span> in the sidebar if auth is enabled.
+          Land customer ERP CSVs — or replay a labeled historic retrospective built from public
+          enforcement themes. Switch to <span className="text-[var(--ink)]">Admin</span> if auth is on.
         </p>
       </header>
+
+      {aether && (
+        <section className="rounded-lg border border-[var(--accent)]/30 bg-[var(--accent)]/5 p-5 md:p-6">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--accent)]">
+            Retrospective proof pack
+          </p>
+          <h2 className="mt-1 font-display text-2xl">{aether.title || aether.case_id}</h2>
+          <p className="mt-2 max-w-3xl text-sm text-[var(--muted)]">
+            {aether.tagline ||
+              "Reconstructed cash cut-off case: phantom affiliate cash, period-end booking, unrecorded fee."}
+          </p>
+          <p className="mt-3 text-sm tabular-nums text-[var(--ink)]">
+            Period {aether.period} · expected bank−ledger{" "}
+            <strong>
+              {typeof aether.expected_bank_minus_ledger === "number"
+                ? aether.expected_bank_minus_ledger.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  })
+                : "—"}
+            </strong>
+          </p>
+          <ol className="mt-3 list-decimal space-y-1 pl-5 text-xs text-[var(--muted)]">
+            {(aether.demo_script || []).map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+          <button
+            disabled={!!busy}
+            onClick={() => run("historic", () => api.importHistoricCase(aether.case_id))}
+            className="mt-4 rounded-md bg-[var(--accent)] px-3 py-2 text-sm text-[var(--accent-fg)] disabled:opacity-60"
+          >
+            {busy === "historic" ? "Loading case…" : "Load historic retrospective"}
+          </button>
+        </section>
+      )}
 
       <section className="grid gap-4 md:grid-cols-2">
         <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5">

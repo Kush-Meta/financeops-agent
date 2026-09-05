@@ -1,0 +1,71 @@
+{
+  "case_id": "aether_2018q3",
+  "period": "2018-09",
+  "title": "Aether Dynamics \u2014 Q3 2018 cash cut-off retrospective",
+  "gap": {
+    "expected": -2440035.0,
+    "actual": -2440035.0,
+    "abs_error": 0.0,
+    "pass": true
+  },
+  "breaks": {
+    "total": 3,
+    "detected": 3,
+    "recall": 1.0,
+    "pass": true,
+    "detail": [
+      {
+        "id": "phantom_affiliate_cash",
+        "expected_amount": 2100000.0,
+        "side": "gl_only",
+        "detected": true,
+        "evidence": {
+          "journal_line_id": 183,
+          "entry_date": "2018-09-28",
+          "amount": 2100000.0,
+          "description": "Wire from Aether EU treasury - Q3 support (cash in transit)",
+          "reference": "AE-PHANTOM-EU",
+          "match_category": "unmatched_gl"
+        }
+      },
+      {
+        "id": "period_end_cutoff",
+        "expected_amount": 340000.0,
+        "side": "gl_only",
+        "detected": true,
+        "evidence": {
+          "journal_line_id": 185,
+          "entry_date": "2018-09-30",
+          "amount": 340000.0,
+          "description": "Collection Eastbay PO-441 booked at close",
+          "reference": "PO-441-CUTOFF",
+          "match_category": "unmatched_gl"
+        }
+      },
+      {
+        "id": "unrecorded_wire_fee",
+        "expected_amount": -35.0,
+        "side": "bank_only",
+        "detected": true,
+        "evidence": {
+          "bank_amount": -35.0,
+          "bank_description": "WIRE FEE INTERNATIONAL",
+          "match_category": "unmatched"
+        }
+      }
+    ]
+  },
+  "matched_ops": {
+    "count": 4,
+    "min_required": 4,
+    "pass": true
+  },
+  "import": {
+    "vendors": 5,
+    "invoices": 5,
+    "bank_txns": 10,
+    "documents": 2,
+    "journal_entries": 15
+  },
+  "pass": true
+}

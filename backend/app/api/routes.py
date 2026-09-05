@@ -11,7 +11,13 @@ from sqlalchemy.orm import Session
 from app import __version__
 from app.agent.workflow import run_investigation
 from app.adapters.csv_erp import parse_upload_bundle
-from app.adapters.persist import apply_adapter_result, import_customer_erp_data, import_real_public_data
+from app.adapters.csv_erp import list_historic_cases
+from app.adapters.persist import (
+    apply_adapter_result,
+    import_customer_erp_data,
+    import_historic_case_data,
+    import_real_public_data,
+)
 from app.api.schemas import AnomalyRequest, ApprovalDecision, AskRequest, HealthResponse, ReconcileRequest
 from app.core.auth import Principal, get_principal, require_role
 from app.core.config import get_settings
@@ -338,6 +344,39 @@ def import_customer_erp(
         raise HTTPException(400, str(exc)) from exc
     return {"status": "ok", "imported_by": principal.name, **result}
 
+
+
+
+@router.get("/imports/historic-cases")
+def historic_cases() -> list[dict]:
+    """List bundled retrospective case packs (public-data reconstructions)."""
+    return [
+        {
+            "case_id": c.get("case_id"),
+            "title": c.get("title"),
+            "tagline": c.get("tagline"),
+            "period": c.get("period"),
+            "expected_bank_minus_ledger": c.get("expected_bank_minus_ledger"),
+            "demo_script": c.get("demo_script"),
+        }
+        for c in list_historic_cases()
+    ]
+
+
+@router.post("/imports/historic-case/{case_id}")
+def import_historic_case(
+    case_id: str,
+    db: Session = Depends(get_db),
+    principal: Principal = Depends(require_role("admin")),
+) -> dict:
+    """Load a labeled historic retrospective (e.g. aether_2018q3)."""
+    try:
+        result = import_historic_case_data(db, case_id=case_id)
+    except FileNotFoundError as exc:
+        raise HTTPException(404, str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    return {"status": "ok", "imported_by": principal.name, "case_id": case_id, **result}
 
 @router.post("/imports/csv")
 async def import_csv_upload(

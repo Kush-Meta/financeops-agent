@@ -41,7 +41,7 @@ export default function ReconciliationPage() {
         <p className="mt-2 text-sm text-[var(--muted)]">
           Match bank transactions to ledger cash lines and invoices using amount, date, reference,
           and fuzzy counterparty scoring. After loading the Meridian ERP pack on Imports, use{" "}
-          <span className="text-[var(--ink)]">2024-09</span> to see the labeled $25,665 gap.
+          <span className="text-[var(--ink)]">2024-09</span> for Meridian ($25,665) or <span className="text-[var(--ink)]">2018-09</span> for the Aether retrospective (−$2.44M).
         </p>
       </header>
 
@@ -57,6 +57,7 @@ export default function ReconciliationPage() {
             <option value="2024-07">2024-07</option>
             <option value="2024-08">2024-08 (synthetic close)</option>
             <option value="2024-09">2024-09 (Meridian ERP)</option>
+            <option value="2018-09">2018-09 (Aether retrospective)</option>
           </select>
         </div>
         <Button onClick={() => void run()} disabled={loading}>

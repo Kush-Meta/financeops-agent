@@ -43,6 +43,7 @@ class Settings(BaseSettings):
     documents_dir: str = str(DATA_DIR / "documents")
     real_data_dir: str = str(DATA_DIR / "real")
     customer_erp_dir: str = str(DATA_DIR / "customer_erp")
+    cases_dir: str = str(DATA_DIR / "cases")
 
     @property
     def cors_origin_list(self) -> list[str]:

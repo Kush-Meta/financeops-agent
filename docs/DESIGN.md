@@ -478,3 +478,17 @@ This release adds the first production-control layer on top of the demo spine:
 7. **CI eval gates** — precision/recall/tool-selection/unsupported-claim thresholds
 
 Real data does not replace the labeled synthetic August close pack; it layers additional vendors, AP, bank disbursements, and benchmark documents so investigations touch publicly attributable records.
+
+
+## Retrospective case packs
+
+Portfolio and diligence readers should start with **[CASES.md](CASES.md)**.
+
+The Aether Dynamics 2018-Q3 pack is a **reconstructed, labeled** close file used to prove:
+
+1. CSV/ERP ingress lands without a custom parser rewrite
+2. Reconciliation recovers a known bank−ledger gap (−$2,440,035)
+3. Investigation stays tool-grounded on phantom cash / cut-off / fee breaks
+4. `eval.run_case_eval` fails the build if those receipts regress
+
+This is deliberately *not* a claim of predicting any specific historical fraud. It is a reproducible control demonstration built from public enforcement *themes* plus public counterparty color (USAspending).

@@ -1,0 +1,70 @@
+{
+  "case_id": "aether_2018q3",
+  "period": "2018-09",
+  "title": "Aether Dynamics \u2014 Q3 2018 cash cut-off retrospective",
+  "tagline": "Would a tool-grounded agent have surfaced the cash that was not there?",
+  "expected_bank_minus_ledger": -2440035.0,
+  "tolerance_usd": 1.0,
+  "breaks": [
+    {
+      "id": "phantom_affiliate_cash",
+      "amount": 2100000.0,
+      "side": "gl_only",
+      "reference": "AE-PHANTOM-EU",
+      "keywords": [
+        "Aether EU",
+        "treasury",
+        "cash in transit"
+      ],
+      "sec_theme": "Cash reported that never cleared a controlled bank account (affiliate / 'cash in transit' window dressing)."
+    },
+    {
+      "id": "period_end_cutoff",
+      "amount": 340000.0,
+      "side": "gl_only",
+      "reference": "PO-441-CUTOFF",
+      "keywords": [
+        "Eastbay",
+        "PO-441",
+        "close"
+      ],
+      "sec_theme": "Period-end cash cut-off: collection booked before the remittance hit the bank."
+    },
+    {
+      "id": "unrecorded_wire_fee",
+      "amount": -35.0,
+      "side": "bank_only",
+      "reference": "FEE-927",
+      "keywords": [
+        "WIRE FEE",
+        "INTERNATIONAL"
+      ],
+      "sec_theme": "Unrecorded bank fee \u2014 small, but proves bank-only evidence is retained."
+    }
+  ],
+  "matched_ops_count_min": 4,
+  "methodology": "Reconstructed illustration. Amounts and entity names are synthetic. Break *patterns* mirror themes repeatedly documented in SEC Accounting and Auditing Enforcement Releases on cash cut-off and improper cash reporting. Vendor names Dell Federal Systems L.P. and Regents of the University of California appear in public USAspending award data bundled with this repo and are used only as realistic counterparty color \u2014 not as an allegation about those recipients.",
+  "sources": [
+    {
+      "title": "SEC Accounting and Auditing Enforcement Releases (cash cut-off / improper cash)",
+      "url": "https://www.sec.gov/enforce/accounting-and-auditing-enforcement-releases",
+      "how_used": "Pattern library for labeled breaks (not a transcription of any single AAER exhibit)."
+    },
+    {
+      "title": "USAspending.gov award data (bundled sample)",
+      "url": "https://www.usaspending.gov/",
+      "how_used": "Public recipient names used as realistic AP counterparties in the reconstructed pack."
+    },
+    {
+      "title": "Frankfurter / ECB FX rates (product corpus)",
+      "url": "https://www.frankfurter.app/",
+      "how_used": "Same public-data spine used elsewhere in FinanceOps for multi-currency demos."
+    }
+  ],
+  "demo_script": [
+    "Imports \u2192 Load Aether 2018-Q3 retrospective",
+    "Reconciliation \u2192 period 2018-09 \u2192 observe bank\u2212ledger \u2248 \u2212$2,440,035",
+    "Investigate \u2192 'Why is September 2018 cash overstated vs the bank?'",
+    "Open case brief document for the controller narrative"
+  ]
+}

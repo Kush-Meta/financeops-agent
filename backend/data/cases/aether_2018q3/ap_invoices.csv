@@ -1,0 +1,6 @@
+invoice_number,vendor_code,invoice_date,due_date,amount,description,status,po_number
+AE-AP-1801,V-HELM,2018-09-04,2018-10-04,128400.00,CNC housings lot H-18,open,PO-1801
+AE-AP-1802,V-ORBIT,2018-09-06,2018-09-20,41250.00,EU inbound freight week 36,open,PO-1802
+AE-AP-1803,V-NEXUS,2018-09-10,2018-10-10,18750.00,Specialty gas cylinders,open,PO-1803
+AE-AP-1804,V-DELLF,2018-09-12,2018-09-26,250000.00,Latitude fleet refresh (public award pattern),open,PO-1804
+AE-AP-1805,V-BERK,2018-09-14,2018-10-14,95000.00,Distributed sensing research retainer,open,PO-1805
