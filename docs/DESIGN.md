@@ -463,3 +463,18 @@ Or: `docker compose up --build`
 ---
 
 *Document version: 0.1 — accompanies the public reference implementation.*
+
+
+## 20. Production hardening (v0.2)
+
+This release adds the first production-control layer on top of the demo spine:
+
+1. **Role-based API keys** — investigator / controller / admin / viewer (`AUTH_ENABLED`)
+2. **Maker–checker** — material amounts require a second, different controller before execution
+3. **Hash-chained audit logs** — `prev_hash` / `entry_hash` with ORM-level immutability guards
+4. **Postgres-ready Compose** — `postgresql+psycopg` path alongside SQLite local default
+5. **Real public data adapters** — USAspending awards, SEC EDGAR slim facts (AAPL/MSFT), Frankfurter FX
+6. **Fee-tolerant reconciliation** — bank fee / FX noise within configurable tolerance
+7. **CI eval gates** — precision/recall/tool-selection/unsupported-claim thresholds
+
+Real data does not replace the labeled synthetic August close pack; it layers additional vendors, AP, bank disbursements, and benchmark documents so investigations touch publicly attributable records.

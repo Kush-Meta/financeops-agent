@@ -99,12 +99,23 @@ def score_match(
     date_diff = abs((bank.txn_date - date_ref).days) if date_ref else None
 
     # Amount
+    fee = float(getattr(bank, "fee_amount", 0.0) or 0.0)
+    fee_adjusted_diff = abs(amount_diff - fee) if fee else amount_diff
+
     if amount_diff <= settings.reconcile_amount_tolerance:
         score += 0.4
         reasons.append("exact_amount")
+    elif fee and fee_adjusted_diff <= settings.reconcile_amount_tolerance:
+        score += 0.38
+        reasons.append("amount_match_after_bank_fee")
+        amount_diff = fee_adjusted_diff
     elif amount_diff <= settings.reconcile_probable_amount_tolerance:
         score += 0.25
         reasons.append("near_amount")
+    elif fee and fee_adjusted_diff <= settings.reconcile_fee_tolerance:
+        score += 0.22
+        reasons.append("fee_tolerant_amount")
+        amount_diff = fee_adjusted_diff
     elif amount_diff <= 50:
         score += 0.1
         reasons.append("loose_amount")

@@ -1,4 +1,4 @@
-"""Human-in-the-loop approval execution."""
+"""Human-in-the-loop approvals with maker-checker for material amounts."""
 
 from __future__ import annotations
 
@@ -9,9 +9,9 @@ from typing import Any, Optional
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models import ApprovalRequest, BankTransaction, JournalEntry, JournalLine, Account
+from app.core.config import get_settings
+from app.models import Account, ApprovalRequest, BankTransaction, JournalEntry, JournalLine
 from app.services.audit import write_audit
-
 
 SENSITIVE_ACTIONS = {
     "mark_reconciled",
@@ -21,6 +21,14 @@ SENSITIVE_ACTIONS = {
 }
 
 
+def _payload_amount(payload: dict[str, Any]) -> float:
+    if payload.get("amount") is not None:
+        return abs(float(payload["amount"]))
+    if payload.get("bank_txn_ids"):
+        return abs(float(payload.get("total_amount") or 0))
+    return 0.0
+
+
 def create_approval_request(
     db: Session,
     action_type: str,
@@ -28,18 +36,34 @@ def create_approval_request(
     description: str,
     payload: dict[str, Any],
     workflow_id: Optional[str] = None,
+    requested_by: str = "agent",
 ) -> ApprovalRequest:
     if action_type not in SENSITIVE_ACTIONS:
         raise ValueError(f"Unsupported action type: {action_type}")
+
+    settings = get_settings()
+    amount = _payload_amount(payload)
+    needs_second = bool(
+        settings.maker_checker_enabled and amount >= settings.maker_checker_amount_threshold
+    )
+
     req = ApprovalRequest(
         request_id=f"apr-{uuid.uuid4().hex[:12]}",
         action_type=action_type,
         title=title,
-        description=description,
+        description=description
+        + (
+            f"\n\nMaker-checker required (amount ${amount:,.2f} ≥ "
+            f"${settings.maker_checker_amount_threshold:,.2f})."
+            if needs_second
+            else ""
+        ),
         payload=payload,
         status="pending",
         workflow_id=workflow_id,
-        requested_by="agent",
+        requested_by=requested_by,
+        requires_second_approval=needs_second,
+        amount=amount,
     )
     db.add(req)
     db.commit()
@@ -50,8 +74,13 @@ def create_approval_request(
             workflow_id,
             "approval_proposed",
             f"Proposed action {action_type}: {title}",
-            details={"request_id": req.request_id, "payload": payload},
-            actor="agent",
+            details={
+                "request_id": req.request_id,
+                "payload": payload,
+                "requires_second_approval": needs_second,
+                "amount": amount,
+            },
+            actor=requested_by,
         )
     return req
 
@@ -71,30 +100,95 @@ def decide_approval(
     review_note: str = "",
 ) -> ApprovalRequest:
     req = db.execute(select(ApprovalRequest).where(ApprovalRequest.request_id == request_id)).scalar_one()
-    if req.status != "pending":
-        raise ValueError(f"Request {request_id} is not pending (status={req.status})")
+    if req.status not in ("pending", "awaiting_second_approval"):
+        raise ValueError(f"Request {request_id} is not approvable (status={req.status})")
     if decision not in ("approved", "rejected"):
         raise ValueError("decision must be approved or rejected")
 
-    req.status = decision
+    # Reject always final
+    if decision == "rejected":
+        req.status = "rejected"
+        req.reviewed_by = reviewed_by
+        req.review_note = review_note
+        req.reviewed_at = datetime.now(timezone.utc).replace(tzinfo=None)
+        db.commit()
+        db.refresh(req)
+        if req.workflow_id:
+            write_audit(
+                db,
+                req.workflow_id,
+                "approval_decision",
+                f"Approval rejected for {req.action_type}",
+                details={"request_id": request_id, "reviewed_by": reviewed_by, "note": review_note},
+                actor=reviewed_by,
+            )
+        return req
+
+    # Maker-checker path
+    if req.requires_second_approval:
+        if req.status == "pending":
+            if reviewed_by == req.requested_by:
+                raise ValueError("Maker cannot also be the first checker for material amounts")
+            req.first_approver = reviewed_by
+            req.status = "awaiting_second_approval"
+            req.review_note = review_note
+            req.reviewed_at = datetime.now(timezone.utc).replace(tzinfo=None)
+            db.commit()
+            db.refresh(req)
+            if req.workflow_id:
+                write_audit(
+                    db,
+                    req.workflow_id,
+                    "approval_decision",
+                    "First approval recorded; awaiting second controller",
+                    details={"request_id": request_id, "first_approver": reviewed_by},
+                    actor=reviewed_by,
+                )
+            return req
+
+        # second approval
+        if reviewed_by in {req.requested_by, req.first_approver}:
+            raise ValueError("Second approver must be different from maker and first checker")
+        req.second_approver = reviewed_by
+        req.reviewed_by = reviewed_by
+        req.review_note = (req.review_note or "") + f"\nSecond approval: {review_note}".strip()
+        req.reviewed_at = datetime.now(timezone.utc).replace(tzinfo=None)
+        req.status = "approved"
+        db.commit()
+        db.refresh(req)
+        if req.workflow_id:
+            write_audit(
+                db,
+                req.workflow_id,
+                "approval_decision",
+                "Second approval recorded; executing",
+                details={
+                    "request_id": request_id,
+                    "first_approver": req.first_approver,
+                    "second_approver": reviewed_by,
+                },
+                actor=reviewed_by,
+            )
+        _execute(db, req)
+        return req
+
+    # Single-approval path
+    req.status = "approved"
     req.reviewed_by = reviewed_by
     req.review_note = review_note
     req.reviewed_at = datetime.now(timezone.utc).replace(tzinfo=None)
     db.commit()
     db.refresh(req)
-
     if req.workflow_id:
         write_audit(
             db,
             req.workflow_id,
             "approval_decision",
-            f"Approval {decision} for {req.action_type}",
+            f"Approval approved for {req.action_type}",
             details={"request_id": request_id, "reviewed_by": reviewed_by, "note": review_note},
             actor=reviewed_by,
         )
-
-    if decision == "approved":
-        _execute(db, req)
+    _execute(db, req)
     return req
 
 
@@ -102,7 +196,9 @@ def _execute(db: Session, req: ApprovalRequest) -> None:
     payload = req.payload or {}
     try:
         if req.action_type in ("mark_reconciled", "approve_match"):
-            txn_ids = payload.get("bank_txn_ids") or ([payload["bank_txn_id"]] if payload.get("bank_txn_id") else [])
+            txn_ids = payload.get("bank_txn_ids") or (
+                [payload["bank_txn_id"]] if payload.get("bank_txn_id") else []
+            )
             for tid in txn_ids:
                 txn = db.get(BankTransaction, int(tid))
                 if txn:
@@ -135,14 +231,49 @@ def _execute(db: Session, req: ApprovalRequest) -> None:
             )
             db.add(entry)
             db.flush()
-            # Positive amount increases cash (debit); negative decreases
             if amount >= 0:
-                db.add(JournalLine(journal_entry_id=entry.id, account_id=cash.id, debit=amount, credit=0.0, description=memo, reference=payload.get("reference")))
-                db.add(JournalLine(journal_entry_id=entry.id, account_id=offset.id, debit=0.0, credit=amount, description=memo, reference=payload.get("reference")))
+                db.add(
+                    JournalLine(
+                        journal_entry_id=entry.id,
+                        account_id=cash.id,
+                        debit=amount,
+                        credit=0.0,
+                        description=memo,
+                        reference=payload.get("reference"),
+                    )
+                )
+                db.add(
+                    JournalLine(
+                        journal_entry_id=entry.id,
+                        account_id=offset.id,
+                        debit=0.0,
+                        credit=amount,
+                        description=memo,
+                        reference=payload.get("reference"),
+                    )
+                )
             else:
                 amt = abs(amount)
-                db.add(JournalLine(journal_entry_id=entry.id, account_id=cash.id, debit=0.0, credit=amt, description=memo, reference=payload.get("reference")))
-                db.add(JournalLine(journal_entry_id=entry.id, account_id=offset.id, debit=amt, credit=0.0, description=memo, reference=payload.get("reference")))
+                db.add(
+                    JournalLine(
+                        journal_entry_id=entry.id,
+                        account_id=cash.id,
+                        debit=0.0,
+                        credit=amt,
+                        description=memo,
+                        reference=payload.get("reference"),
+                    )
+                )
+                db.add(
+                    JournalLine(
+                        journal_entry_id=entry.id,
+                        account_id=offset.id,
+                        debit=amt,
+                        credit=0.0,
+                        description=memo,
+                        reference=payload.get("reference"),
+                    )
+                )
             req.payload = {**payload, "created_entry_number": entry_number}
 
         req.status = "executed"

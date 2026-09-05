@@ -17,7 +17,7 @@
   "agent": {
     "tool_selection_accuracy": 1.0,
     "task_completion_rate": 1.0,
-    "avg_latency_ms": 69.22,
+    "avg_latency_ms": 68.55,
     "avg_cost_usd": 0.0,
     "avg_unsupported_claim_rate": 0.0,
     "tasks": [
@@ -25,21 +25,21 @@
         "id": "bank_gap",
         "tool_selection_ok": true,
         "completed": true,
-        "latency_ms": 135.21,
+        "latency_ms": 135.11,
         "unsupported_claim_rate": 0.0
       },
       {
         "id": "variances",
         "tool_selection_ok": true,
         "completed": true,
-        "latency_ms": 36.29,
+        "latency_ms": 35.16,
         "unsupported_claim_rate": 0.0
       },
       {
         "id": "anomalies",
         "tool_selection_ok": true,
         "completed": true,
-        "latency_ms": 36.16,
+        "latency_ms": 35.38,
         "unsupported_claim_rate": 0.0
       }
     ]

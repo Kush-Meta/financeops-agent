@@ -34,10 +34,14 @@ cd backend
 # requires uv: https://docs.astral.sh/uv/
 uv sync
 uv run python -m app.scripts.seed
+# Optional: re-import public datasets (USAspending + SEC + FX)
+uv run python -c "from app.core.database import SessionLocal; from app.adapters.persist import import_real_public_data; db=SessionLocal(); print(import_real_public_data(db))"
 uv run uvicorn app.main:app --host 127.0.0.1 --port 8765 --reload
 ```
 
 API docs: http://127.0.0.1:8765/docs
+
+On first boot the API seeds the synthetic August 2024 close pack **and** imports real public data from `backend/data/real/` (USAspending awards, SEC AAPL/MSFT slim facts, ECB FX rates).
 
 ### Frontend (Next.js)
 
@@ -50,13 +54,37 @@ npm run dev -- -p 3847 -H 127.0.0.1
 
 UI: http://127.0.0.1:3847
 
-### Docker Compose
+Use the sidebar **Acting as** control to switch demo roles (`fo_controller_dev`, `fo_investigator_dev`, `fo_admin_dev`, `fo_viewer_dev`). Set `AUTH_ENABLED=true` on the API to enforce them.
+
+### Docker Compose (Postgres)
 
 ```bash
 docker compose up --build
 ```
 
-## System architecture
+This starts Postgres 16 + API + web. Override with SQLite by setting `DATABASE_URL=sqlite:////data/financeops.db` on the API service.
+
+## Production-oriented controls
+
+| Control | What shipped |
+|---------|----------------|
+| Role-based API keys | Investigator / controller / admin / viewer (`AUTH_ENABLED`) |
+| Maker–checker | Material amounts require a second, different controller |
+| Immutable audit | Hash-chained `audit_logs` with update/delete blocked |
+| Postgres path | `DATABASE_URL=postgresql+psycopg://...` + Compose service |
+| Real public data | USAspending awards, SEC company facts, Frankfurter FX |
+| Fee-tolerant matching | Bank fee / FX noise within `reconcile_fee_tolerance` |
+| CI gates | Pytest + eval precision/recall/tool-selection thresholds |
+
+## Real data sources
+
+Bundled under `backend/data/real/`:
+
+- **USAspending.gov** — federal award recipients used as vendors/AP/bank disbursements
+- **SEC EDGAR companyfacts** — slim AAPL/MSFT cash, revenue, R&D, SG&A benchmarks
+- **Frankfurter/ECB** — USD FX rates for multi-currency demo noise
+
+Import is idempotent via `external_id` / invoice numbers and recorded in `import_batches`.
 
 ```
 User Request

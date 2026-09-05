@@ -10,7 +10,9 @@ from sqlalchemy.orm import Session
 
 from app import __version__
 from app.agent.workflow import run_investigation
+from app.adapters.persist import import_real_public_data
 from app.api.schemas import AnomalyRequest, ApprovalDecision, AskRequest, HealthResponse, ReconcileRequest
+from app.core.auth import Principal, get_principal, require_role
 from app.core.config import get_settings
 from app.core.database import get_db
 from app.models import (
@@ -19,10 +21,12 @@ from app.models import (
     AuditLog,
     BankTransaction,
     Document,
+    ImportBatch,
     Invoice,
     WorkflowRun,
 )
 from app.services import approvals as approval_service
+from app.services.audit import verify_audit_chain
 from app.tools.anomalies import detect_anomalies
 from app.tools.reconcile import reconcile_transactions
 from app.tools.variance import calculate_variance
@@ -37,13 +41,37 @@ def health() -> HealthResponse:
     return HealthResponse(status="ok", version=__version__, database=settings.database_url.split("://")[0])
 
 
+@router.get("/auth/me")
+def auth_me(principal: Principal = Depends(get_principal)) -> dict[str, Any]:
+    settings = get_settings()
+    return {
+        "user_id": principal.user_id,
+        "name": principal.name,
+        "role": principal.role,
+        "api_key_id": principal.api_key_id,
+        "auth_enabled": settings.auth_enabled,
+        "maker_checker_enabled": settings.maker_checker_enabled,
+        "maker_checker_amount_threshold": settings.maker_checker_amount_threshold,
+        "demo_keys": {
+            "investigator": "fo_investigator_dev",
+            "controller": "fo_controller_dev",
+            "admin": "fo_admin_dev",
+            "viewer": "fo_viewer_dev",
+        },
+    }
+
+
 @router.post("/ask")
-def ask(body: AskRequest, db: Session = Depends(get_db)) -> dict[str, Any]:
+def ask(
+    body: AskRequest,
+    db: Session = Depends(get_db),
+    principal: Principal = Depends(require_role("investigator")),
+) -> dict[str, Any]:
     try:
         return run_investigation(
             db,
             user_request=body.question,
-            actor=body.actor,
+            actor=principal.name,
             auto_propose_actions=body.auto_propose_actions,
         )
     except Exception as exc:  # noqa: BLE001
@@ -255,13 +283,18 @@ def get_approvals(status: Optional[str] = None, db: Session = Depends(get_db)) -
 
 
 @router.post("/approvals/{request_id}/decide")
-def decide(request_id: str, body: ApprovalDecision, db: Session = Depends(get_db)) -> dict:
+def decide(
+    request_id: str,
+    body: ApprovalDecision,
+    db: Session = Depends(get_db),
+    principal: Principal = Depends(require_role("controller")),
+) -> dict:
     try:
         req = approval_service.decide_approval(
             db,
             request_id=request_id,
             decision=body.decision,
-            reviewed_by=body.reviewed_by,
+            reviewed_by=body.reviewed_by or principal.name,
             review_note=body.review_note,
         )
     except ValueError as exc:
@@ -271,8 +304,44 @@ def decide(request_id: str, body: ApprovalDecision, db: Session = Depends(get_db
         "status": req.status,
         "payload": req.payload,
         "reviewed_by": req.reviewed_by,
+        "requires_second_approval": req.requires_second_approval,
+        "first_approver": req.first_approver,
+        "second_approver": req.second_approver,
         "executed_at": req.executed_at.isoformat() if req.executed_at else None,
     }
+
+
+@router.post("/imports/real-public")
+def import_real(
+    db: Session = Depends(get_db),
+    principal: Principal = Depends(require_role("admin")),
+) -> dict:
+    try:
+        result = import_real_public_data(db)
+    except FileNotFoundError as exc:
+        raise HTTPException(404, str(exc)) from exc
+    return {"status": "ok", "imported_by": principal.name, **result}
+
+
+@router.get("/imports")
+def list_imports(db: Session = Depends(get_db)) -> list[dict]:
+    rows = db.execute(select(ImportBatch).order_by(desc(ImportBatch.created_at)).limit(20)).scalars().all()
+    return [
+        {
+            "batch_id": r.batch_id,
+            "source": r.source,
+            "description": r.description,
+            "record_count": r.record_count,
+            "details": r.details,
+            "created_at": r.created_at.isoformat() if r.created_at else None,
+        }
+        for r in rows
+    ]
+
+
+@router.get("/audit/chain/verify")
+def audit_chain_verify(db: Session = Depends(get_db)) -> dict:
+    return verify_audit_chain(db)
 
 
 @router.get("/audit/{workflow_id}")

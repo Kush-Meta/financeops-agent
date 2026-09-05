@@ -134,6 +134,10 @@ class BankTransaction(Base):
     counterparty: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     reference: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, index=True)
     txn_type: Mapped[str] = mapped_column(String(40), default="ach")
+    currency: Mapped[str] = mapped_column(String(8), default="USD")
+    fee_amount: Mapped[float] = mapped_column(Float, default=0.0)
+    source_system: Mapped[str] = mapped_column(String(40), default="seed")
+    external_id: Mapped[Optional[str]] = mapped_column(String(128), nullable=True, index=True)
     reconciliation_status: Mapped[str] = mapped_column(String(32), default="unmatched", index=True)
     # unmatched | matched | probable | needs_review | reconciled
     matched_journal_line_id: Mapped[Optional[int]] = mapped_column(
@@ -218,11 +222,15 @@ class ApprovalRequest(Base):
     description: Mapped[str] = mapped_column(Text)
     payload: Mapped[dict] = mapped_column(JSON)
     status: Mapped[str] = mapped_column(String(32), default="pending", index=True)
-    # pending | approved | rejected | executed | failed
+    # pending | awaiting_second_approval | approved | rejected | executed | failed
     workflow_id: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, index=True)
     requested_by: Mapped[str] = mapped_column(String(80), default="agent")
     reviewed_by: Mapped[Optional[str]] = mapped_column(String(80), nullable=True)
     review_note: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    requires_second_approval: Mapped[bool] = mapped_column(Boolean, default=False)
+    first_approver: Mapped[Optional[str]] = mapped_column(String(80), nullable=True)
+    second_approver: Mapped[Optional[str]] = mapped_column(String(80), nullable=True)
+    amount: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     reviewed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     executed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
@@ -240,7 +248,21 @@ class AuditLog(Base):
     message: Mapped[str] = mapped_column(Text)
     details: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     duration_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    prev_hash: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
+    entry_hash: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
+
+
+class ImportBatch(Base):
+    __tablename__ = "import_batches"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    batch_id: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    source: Mapped[str] = mapped_column(String(64))  # usaspending | sec | csv_bank | csv_gl
+    description: Mapped[str] = mapped_column(String(500), default="")
+    record_count: Mapped[int] = mapped_column(Integer, default=0)
+    details: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
 class WorkflowRun(Base):

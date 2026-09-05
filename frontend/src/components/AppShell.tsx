@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   Activity,
@@ -12,6 +13,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getApiKey, setApiKey } from "@/lib/api";
 
 const links = [
   { href: "/", label: "Overview", icon: LayoutDashboard },
@@ -23,8 +25,21 @@ const links = [
   { href: "/records", label: "Records", icon: FileSearch },
 ];
 
+const ROLES = [
+  { key: "fo_controller_dev", label: "Controller" },
+  { key: "fo_investigator_dev", label: "Investigator" },
+  { key: "fo_admin_dev", label: "Admin" },
+  { key: "fo_viewer_dev", label: "Viewer" },
+];
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [roleKey, setRoleKey] = useState("fo_controller_dev");
+
+  useEffect(() => {
+    setRoleKey(getApiKey() || "fo_controller_dev");
+  }, []);
+
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[240px_1fr]">
       <aside className="border-b border-[var(--border)] bg-[var(--panel)] lg:border-b-0 lg:border-r">
@@ -56,6 +71,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
+        <div className="mt-auto hidden border-t border-[var(--border)] px-4 py-4 lg:block">
+          <label className="text-[10px] uppercase tracking-wide text-[var(--muted)]">
+            Acting as
+          </label>
+          <select
+            className="mt-1 w-full rounded-md border border-[var(--border)] bg-[var(--surface)] px-2 py-1.5 text-xs"
+            value={roleKey}
+            onChange={(e) => {
+              setRoleKey(e.target.value);
+              setApiKey(e.target.value);
+            }}
+          >
+            {ROLES.map((r) => (
+              <option key={r.key} value={r.key}>
+                {r.label}
+              </option>
+            ))}
+          </select>
+          <p className="mt-2 text-[10px] leading-snug text-[var(--muted)]">
+            Demo API keys map to roles. Enable AUTH_ENABLED on the API for enforcement.
+          </p>
+        </div>
       </aside>
       <main className="relative min-h-screen">
         <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />

@@ -23,8 +23,19 @@ def _ensure_seeded() -> None:
         count = db.query(Account).count()
         if count == 0:
             from app.scripts.seed import seed
+            from app.adapters.persist import import_real_public_data
+            from app.services.audit import register_audit_immutability
 
             seed(db)
+            try:
+                import_real_public_data(db)
+            except FileNotFoundError:
+                pass
+            register_audit_immutability()
+        else:
+            from app.services.audit import register_audit_immutability
+
+            register_audit_immutability()
     finally:
         db.close()
 

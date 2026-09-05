@@ -17,25 +17,31 @@ class Settings(BaseSettings):
     debug: bool = True
     api_prefix: str = "/api"
 
+    # sqlite default; Postgres: postgresql+psycopg://financeops:financeops@db:5432/financeops
     database_url: str = f"sqlite:///{DATA_DIR / 'financeops.db'}"
 
-    # LLM — leave empty to use deterministic mock planner/explainer
     openai_api_key: str = ""
     openai_base_url: str = "https://api.openai.com/v1"
     openai_model: str = "gpt-4o-mini"
     llm_enabled: bool = False
 
-    # Matching thresholds
+    auth_enabled: bool = False
+    admin_api_key_hash: str = ""
+
+    maker_checker_enabled: bool = True
+    maker_checker_amount_threshold: float = 10000.0
+
+    # names used by tools/reconcile.py and tools/anomalies.py
     reconcile_amount_tolerance: float = 0.01
     reconcile_date_window_days: int = 5
     reconcile_probable_amount_tolerance: float = 1.0
+    reconcile_fee_tolerance: float = 25.0
     anomaly_zscore_threshold: float = 3.0
 
-    # CORS
     cors_origins: str = "http://localhost:3847,http://127.0.0.1:3847"
-
     log_level: str = "INFO"
     documents_dir: str = str(DATA_DIR / "documents")
+    real_data_dir: str = str(DATA_DIR / "real")
 
     @property
     def cors_origin_list(self) -> list[str]:

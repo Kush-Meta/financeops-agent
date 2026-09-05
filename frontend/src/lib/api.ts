@@ -1,11 +1,24 @@
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://127.0.0.1:8765/api";
 
+const API_KEY_STORAGE = "financeops_api_key";
+
+export function getApiKey(): string {
+  if (typeof window === "undefined") return "fo_controller_dev";
+  return window.localStorage.getItem(API_KEY_STORAGE) || "fo_controller_dev";
+}
+
+export function setApiKey(key: string) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(API_KEY_STORAGE, key);
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
+      "X-API-Key": getApiKey(),
       ...(init?.headers || {}),
     },
     cache: "no-store",

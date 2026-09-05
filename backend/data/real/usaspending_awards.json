@@ -1,0 +1,362 @@
+[
+  {
+    "award_id": "W912MM21P0037",
+    "recipient": "SOUTH DAKOTA HIGH SCHOOL ACTIVITIES ASSOCIATION",
+    "start_date": "2021-08-01",
+    "end_date": "2026-07-31",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "SD HIGH SCHOOL ACTIVITIES ASSOCIATION (SDHSAA) SPORTS MARKETING & ADVERTISING"
+  },
+  {
+    "award_id": "W912L924F0083",
+    "recipient": "DELL FEDERAL SYSTEMS L.P",
+    "start_date": "2024-08-07",
+    "end_date": "2024-09-28",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "250 DELL LATITUDE 5550 CTO BASE, 16 GB: 1 X 16 GB, DDR5, 5600 MT/S (5200 MT/S WITH 13TH GEN INTEL CORE PROCESSORS), ENGLISH US NON-BACKLIT AI HOTKEY KEYBOARD, 79-KEY (583-BFRS), INTEL AX211 WLAN DRIVER (555-BKQC)."
+  },
+  {
+    "award_id": "W912HZ24P0038",
+    "recipient": "REGENTS OF THE UNIVERSITY OF CALIFORNIA, THE",
+    "start_date": "2024-03-11",
+    "end_date": "2028-03-10",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "BAA 23-0094 UNIVERSITY OF CALIFORNIA, BERKELEY- USE OF DISTRIBUTED FIBER OPTIC ACOUSTIC SENSING FOR MITIGATING OVERTOPPING DAMAGE IN GEOTECHNICAL PROJECTS  U438180"
+  },
+  {
+    "award_id": "W912HQ24P0045",
+    "recipient": "UNIVERSITY OF SOUTHERN CALIFORNIA",
+    "start_date": "2024-06-18",
+    "end_date": "2027-06-17",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "SERDP WP23-0233 NEW START REDUCING COMPOSITE PRODUCTION WASTE FROM EXPIRED PREPREG"
+  },
+  {
+    "award_id": "W912HQ24P0038",
+    "recipient": "SMITHSONIAN INSTITUTION",
+    "start_date": "2024-07-10",
+    "end_date": "2027-07-09",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "SERDP PROJECT RC24-4289, SMITHSONIAN INSTITUTION: \"A THERMAL LANDSCAPE APPROACH FOR CUMULATIVE RISK ASSESSMENT OF SPOTTED TURTLE VULNERABILITY TO MULTIPLE STRESSORS\""
+  },
+  {
+    "award_id": "W912HQ23P0070",
+    "recipient": "GEORGIA TECH APPLIED RESEARCH CORP",
+    "start_date": "2023-09-12",
+    "end_date": "2026-09-21",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "ESTCP MR23-S1-3982"
+  },
+  {
+    "award_id": "W912HQ23P0043",
+    "recipient": "NEW JERSEY INSTITUTE OF TECHNOLOGY",
+    "start_date": "2023-09-20",
+    "end_date": "2026-09-19",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "NEW START SERDP ER23-3830 ATTENUATION MECHANISMS AND BIODEGRADATION KINETICS OF 1,4-DIOXANE BY PROPANE MONOOXYGENASE-EXPRESSING MICROORGANISMS"
+  },
+  {
+    "award_id": "W912HQ23P0013",
+    "recipient": "UNIVERSITY OF CALIFORNIA, LOS ANGELES",
+    "start_date": "2023-01-24",
+    "end_date": "2027-01-23",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "SERDP PROJECT: ER23-3775 A SYSTEMS APPROACH FOR THE ASSESSMENT AND PREDICTION OF THE NATURAL ATTENUATION MECHANISMS OF CONTAMINANT MIXTURES"
+  },
+  {
+    "award_id": "W912HQ22P0142",
+    "recipient": "REGENTS OF THE UNIVERSITY OF IDAHO",
+    "start_date": "2022-09-30",
+    "end_date": "2026-09-30",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "NEW START ER21-3564 NON-THERMAL TREATMENT OF UNUSED AFFF CONCENTRATE BY LIQUID-PHASE PLASMA DISCHARGE PROCESS"
+  },
+  {
+    "award_id": "W912ER23F0060",
+    "recipient": "INTERDYNE CORP",
+    "start_date": "2023-05-25",
+    "end_date": "2024-05-29",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "OPTION YEAR 2 EMERGENCY REPAIRS/REPLACEMENT IN ACCORDANCE WITH THE CONTRACT DOCUMENTS (NOT TO EXCEED $250,000.00 UNLESS MODIFIED DURING CONTRACT PERFORMANCE)."
+  },
+  {
+    "award_id": "W912CN24F0300",
+    "recipient": "WORK NOW HAWAII",
+    "start_date": "2024-04-26",
+    "end_date": "2024-09-08",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "CUSTODIAL - EMERGENCY / ONE-TIME / CONTINGENCY"
+  },
+  {
+    "award_id": "W81K0023F0128",
+    "recipient": "LANTHEUS MEDICAL IMAGING, INC.",
+    "start_date": "2023-01-10",
+    "end_date": "2024-09-30",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "VARIOUS RADIOPHARMACUETICALS"
+  },
+  {
+    "award_id": "W5170124C0200",
+    "recipient": "X-WAVE INNOVATIONS, INC.",
+    "start_date": "2024-06-17",
+    "end_date": "2024-12-17",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "SMALL BUSINESS INNOVATION RESEARCH (SBIR) PHASE I, \"NON-RF TRANSCEIVER ALTERNATIVE COMMUNICATOR (NRF-TAC).\" DESIGN AND BUILD AN INNOVATIVE PROTOTYPE DEVICE CAPABLE OF BEING DEMONSTRATED IN A REALISTIC FIELD APPLICATION."
+  },
+  {
+    "award_id": "SPRHA424P0070",
+    "recipient": "AEROSPACE & COMMERCIAL TECHNOLOGIES, LLC",
+    "start_date": "2024-08-06",
+    "end_date": "2025-12-29",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "F-16 COVER,ACCESS,AIRCRAFT"
+  },
+  {
+    "award_id": "SPE7M124P7985",
+    "recipient": "VICKERS AND ASSOCIATES LLC",
+    "start_date": "2024-06-25",
+    "end_date": "2025-10-28",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "8510718499!PUMP,AXIAL PISTONS"
+  },
+  {
+    "award_id": "SPE7L324P6839",
+    "recipient": "VICKERS AND ASSOCIATES LLC",
+    "start_date": "2024-07-11",
+    "end_date": "2024-08-26",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "8510747182!GASKET AND SEAL SET"
+  },
+  {
+    "award_id": "SPE4A624PY398",
+    "recipient": "GOVPARTS LLC",
+    "start_date": "2024-08-27",
+    "end_date": "2025-04-04",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "8510849592!BEARING,BALL,ANNULAR"
+  },
+  {
+    "award_id": "SPE4A623PU702",
+    "recipient": "DCX-CHOL ENTERPRISES, INC.",
+    "start_date": "2023-07-31",
+    "end_date": "2025-09-26",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "8510021636!CABLE ASSEMBLY,POWE"
+  },
+  {
+    "award_id": "SPE4A621P1536",
+    "recipient": "DCX-CHOL ENTERPRISES, INC",
+    "start_date": "2020-10-22",
+    "end_date": "2024-12-13",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "8507744598!CABLE ASSEMBLY,SPECIAL PURPOS"
+  },
+  {
+    "award_id": "SPE4A124P1609",
+    "recipient": "AMERITECH DIE & MOLD SOUTH, INC.",
+    "start_date": "2024-07-10",
+    "end_date": "2024-12-27",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "8510744894!HOOK"
+  },
+  {
+    "award_id": "SP470623F0024",
+    "recipient": "KCORP RELIANCE COMPANY, INC.",
+    "start_date": "2023-09-25",
+    "end_date": "2025-09-30",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "WALL-E#: 23-C2-1009, AOTSS IDIQ TO#2 LAB MOVE"
+  },
+  {
+    "award_id": "N4425524F9505",
+    "recipient": "BLACK SYSTEMS LLC",
+    "start_date": "2024-06-05",
+    "end_date": "2025-06-23",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "TALENT ACQUISITION SERVICES FOR HARD TO FILL POSITIONS"
+  },
+  {
+    "award_id": "N3943024F4188",
+    "recipient": "LISTER CHAIN & FORGE INC",
+    "start_date": "2024-08-23",
+    "end_date": "2025-05-22",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "FLEET MOORING CHAIN AND ACCESSORIES"
+  },
+  {
+    "award_id": "N3239824P0032",
+    "recipient": "CAREDX LAB SOLUTIONS INC",
+    "start_date": "2024-06-14",
+    "end_date": "2025-05-01",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "STAGE 1 OPTIMIZATION REAGENTS COST"
+  },
+  {
+    "award_id": "N0016424PJ105",
+    "recipient": "PACIFIC SCIENTIFIC ENERGETIC MATERIALS CO CALIFORNIA LLC",
+    "start_date": "2024-07-02",
+    "end_date": "2025-07-07",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "104477-213 DETONATOR"
+  },
+  {
+    "award_id": "N0002424F8546",
+    "recipient": "UNIVERSITY OF TEXAS AT AUSTIN",
+    "start_date": "2024-08-28",
+    "end_date": "2026-08-27",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "FY24 MCS TAT2 SUSTAINMENT"
+  },
+  {
+    "award_id": "N0002424F8541",
+    "recipient": "UNIVERSITY OF TEXAS AT AUSTIN",
+    "start_date": "2024-06-04",
+    "end_date": "2026-06-03",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "EC-20 HARDWARE COMPONENTS"
+  },
+  {
+    "award_id": "N0002424F8533",
+    "recipient": "UNIVERSITY OF TEXAS AT AUSTIN",
+    "start_date": "2024-08-29",
+    "end_date": "2026-02-28",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "FY24 FLS UPDATE PACKAGE"
+  },
+  {
+    "award_id": "N0002424F4A76",
+    "recipient": "GLOBAL PCCI (GPC)",
+    "start_date": "2024-07-23",
+    "end_date": "2026-07-15",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "(FY24 PMS392 OPN)VACL RBP COFFERDAM MODI"
+  },
+  {
+    "award_id": "N0002423F8907",
+    "recipient": "THE JOHNS HOPKINS UNIVERSITY APPLIED PHYSICS LABORATORY LLC",
+    "start_date": "2023-08-22",
+    "end_date": "2024-09-30",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "N-ASTC: RAPT & CLUSTER ENVIRONMENT INTEGRATION SUPPORT"
+  },
+  {
+    "award_id": "N0002423F8543",
+    "recipient": "UNIVERSITY OF TEXAS AT AUSTIN",
+    "start_date": "2023-06-09",
+    "end_date": "2026-06-08",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "CRITICAL DATA ANALYSIS II"
+  },
+  {
+    "award_id": "N0001424FT188",
+    "recipient": "THE CNA CORPORATION",
+    "start_date": "2024-08-05",
+    "end_date": "2026-10-03",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "PROJECT TITLE: ASSESSING THE RECRUITING IMPLICATIONS OF MENTAL HEALTH RESTRICTIONS AT US SERVICE ACADEMIES PROJECT NO. 0007.5964.F602.00"
+  },
+  {
+    "award_id": "N0001424FT123",
+    "recipient": "THE CNA CORPORATION",
+    "start_date": "2024-03-22",
+    "end_date": "2025-03-21",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "PROJECT TITLE: CHINA-RUSSIA BORDER CONFLICT PROJECT NO. 0007.5871.F334.00"
+  },
+  {
+    "award_id": "N0001423P1005",
+    "recipient": "FLORIDA INSTITUTE FOR HUMAN & MACHINE COGNITION INC",
+    "start_date": "2023-08-02",
+    "end_date": "2024-09-20",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "THIS EFFORT IS TO BE PERFORMED AS PART OF THE EVALUATION OF FUTURE ROBOTIC TECHNOLOGIES, THEIR APPLICATIONS, AND THE REQUIREMENTS TO PERFORM TASKS ON UNMANNED SURFACE VEHICLES."
+  },
+  {
+    "award_id": "N0001423P1003",
+    "recipient": "BOSTON ENGINEERING CORPORATION",
+    "start_date": "2023-07-27",
+    "end_date": "2024-07-30",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "THIS EFFORT WILL RESEARCH THE FUTURE DEVELOPMENT OF ROBOTICS AND THEIR CAPABILITIES IN THE 5 TO 20 YEAR TIMEFRAME AND RECOMMEND REQUIREMENTS FOR A RMPS CAPABILITY TO SELF-NAVIGATE, STABILIZE, AND PERFORM MAINTENANCE ACTIVITIES WHILE MAINTAINING THE A"
+  },
+  {
+    "award_id": "N0001423FT100",
+    "recipient": "THE CNA CORPORATION",
+    "start_date": "2023-09-15",
+    "end_date": "2026-09-30",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "LONG TERM OUTCOMES OF DOD TUITION ASSISTANCE: IMPACTS ON EMPLOYMENT AND EARNINGS PHASE 2; 0007.5822.F248.00"
+  },
+  {
+    "award_id": "N0001423FT066",
+    "recipient": "THE CNA CORPORATION",
+    "start_date": "2023-07-10",
+    "end_date": "2025-03-10",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "CHARACTERIZATION OF VESSEL TRAFFIC IN THE NAVYS HAWAII CALIFORNIA TRAINING AND TESTING AREA 0007.5776.F167.00"
+  },
+  {
+    "award_id": "N0001418C2051",
+    "recipient": "PACMAR TECHNOLOGIES LLC",
+    "start_date": "2018-07-13",
+    "end_date": "2021-07-15",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "IGF::CT::IGF"
+  },
+  {
+    "award_id": "HT942524P0074",
+    "recipient": "CRITICAL INNOVATIONS LLC",
+    "start_date": "2024-06-21",
+    "end_date": "2025-01-20",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "DEFENSE HEALTH AGENCY SMALL BUSINESS INNOVATION RESEARCH PROGRAM, MEDICAL RESEARCH AND DEVELOPMENT CONTRACT AWARDED FROM PROPOSAL H241-002-0048, TITLE AID-TEX WEARABLE E-TEXTILE SYSTEM FOR CONTROL OF JUNCTIONAL AND EXTREMITY HEMORRHAGE"
+  },
+  {
+    "award_id": "HT001424F0128",
+    "recipient": "CENTRAL ADMIXTURE PHARMACY SERVICES, INC",
+    "start_date": "2024-08-21",
+    "end_date": "2025-08-20",
+    "amount": 250000.0,
+    "agency": "Department of Defense",
+    "description": "COMPOUNDING TOTAL PARENTERAL NUTRITION"
+  }
+]

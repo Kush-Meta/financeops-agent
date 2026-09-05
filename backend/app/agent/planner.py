@@ -52,14 +52,18 @@ def _extract_period(text: str) -> str | None:
         "nov": "11",
         "dec": "12",
     }
-    m = re.search(r"(20\d{2})-(\d{2})", text)
+    # Explicit YYYY-MM first
+    m = re.search(r"\b(20\d{2})-(\d{2})\b", text)
     if m:
         return f"{m.group(1)}-{m.group(2)}"
     lower = text.lower()
+    # Avoid treating dollar amounts like $82,000 as year 2000
+    stripped_amounts = re.sub(r"\$[\d,]+(?:\.\d+)?", " ", lower)
+    stripped_amounts = re.sub(r"\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b", " ", stripped_amounts)
     for name, num in months.items():
-        if name in lower:
-            year_m = re.search(r"20\d{2}", lower)
-            year = year_m.group(0) if year_m else "2024"
+        if re.search(rf"\b{name}\b", stripped_amounts):
+            year_m = re.search(r"\b(20\d{2})\b", stripped_amounts)
+            year = year_m.group(1) if year_m else "2024"
             return f"{year}-{num}"
     return None
 
