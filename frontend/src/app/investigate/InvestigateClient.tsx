@@ -124,7 +124,9 @@ export default function InvestigateClient() {
           placeholder="Why does the August bank balance not match the general ledger?"
         />
         <div className="mt-3 flex items-center justify-between gap-3">
-          <p className="text-xs text-[var(--muted)]">Synthetic dataset period focus: 2024-06 → 2024-08</p>
+          <p className="text-xs text-[var(--muted)]">
+            Dataset focus: 2024-06 → 2024-08 synthetic close; 2024-09 Meridian ERP CSV pack
+          </p>
           <Button type="submit" disabled={loading}>
             {loading ? (
               <>

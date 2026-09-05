@@ -14,7 +14,7 @@ const badge: Record<string, string> = {
 };
 
 export default function ReconciliationPage() {
-  const [period, setPeriod] = useState("2024-08");
+  const [period, setPeriod] = useState("2024-09");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<ReconData | null>(null);
   const [summary, setSummary] = useState("");
@@ -40,7 +40,8 @@ export default function ReconciliationPage() {
         <h1 className="font-display text-3xl sm:text-4xl">Reconciliation</h1>
         <p className="mt-2 text-sm text-[var(--muted)]">
           Match bank transactions to ledger cash lines and invoices using amount, date, reference,
-          and fuzzy counterparty scoring.
+          and fuzzy counterparty scoring. After loading the Meridian ERP pack on Imports, use{" "}
+          <span className="text-[var(--ink)]">2024-09</span> to see the labeled $25,665 gap.
         </p>
       </header>
 
@@ -54,7 +55,8 @@ export default function ReconciliationPage() {
           >
             <option value="2024-06">2024-06</option>
             <option value="2024-07">2024-07</option>
-            <option value="2024-08">2024-08</option>
+            <option value="2024-08">2024-08 (synthetic close)</option>
+            <option value="2024-09">2024-09 (Meridian ERP)</option>
           </select>
         </div>
         <Button onClick={() => void run()} disabled={loading}>
