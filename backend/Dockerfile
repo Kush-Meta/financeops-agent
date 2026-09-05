@@ -7,6 +7,7 @@ COPY pyproject.toml uv.lock README.md ./
 COPY app ./app
 COPY eval ./eval
 COPY tests ./tests
+COPY data ./data
 
 RUN uv sync --frozen --no-dev
 

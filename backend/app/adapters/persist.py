@@ -156,3 +156,10 @@ def apply_adapter_result(db: Session, result: AdapterResult) -> dict:
 def import_real_public_data(db: Session) -> dict:
     bundle = default_real_bundle()
     return apply_adapter_result(db, bundle)
+
+
+def import_customer_erp_data(db: Session, directory: Path | None = None) -> dict:
+    from app.adapters.csv_erp import load_customer_erp_bundle
+
+    bundle = load_customer_erp_bundle(directory)
+    return apply_adapter_result(db, bundle)

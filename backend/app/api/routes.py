@@ -4,13 +4,14 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from sqlalchemy import desc, select
 from sqlalchemy.orm import Session
 
 from app import __version__
 from app.agent.workflow import run_investigation
-from app.adapters.persist import import_real_public_data
+from app.adapters.csv_erp import parse_upload_bundle
+from app.adapters.persist import apply_adapter_result, import_customer_erp_data, import_real_public_data
 from app.api.schemas import AnomalyRequest, ApprovalDecision, AskRequest, HealthResponse, ReconcileRequest
 from app.core.auth import Principal, get_principal, require_role
 from app.core.config import get_settings
@@ -323,9 +324,55 @@ def import_real(
     return {"status": "ok", "imported_by": principal.name, **result}
 
 
+@router.post("/imports/customer-erp")
+def import_customer_erp(
+    db: Session = Depends(get_db),
+    principal: Principal = Depends(require_role("admin")),
+) -> dict:
+    """Load the bundled Meridian Robotics ERP CSV extract (customer-shaped demo)."""
+    try:
+        result = import_customer_erp_data(db)
+    except FileNotFoundError as exc:
+        raise HTTPException(404, str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    return {"status": "ok", "imported_by": principal.name, **result}
+
+
+@router.post("/imports/csv")
+async def import_csv_upload(
+    files: list[UploadFile] = File(...),
+    db: Session = Depends(get_db),
+    principal: Principal = Depends(require_role("admin")),
+) -> dict:
+    """Upload one or more customer CSVs (vendors / invoices / bank / GL).
+
+    Filename heuristics: include `vendor`, `invoice`/`ap`/`bill`, `bank`, or `gl`/`journal`.
+    """
+    if not files:
+        raise HTTPException(400, "Upload at least one CSV file")
+    parsed: list[tuple[str, str]] = []
+    for upload in files:
+        name = upload.filename or "upload.csv"
+        if not name.lower().endswith(".csv"):
+            raise HTTPException(400, f"Only CSV uploads supported (got {name})")
+        raw = await upload.read()
+        try:
+            text = raw.decode("utf-8-sig")
+        except UnicodeDecodeError as exc:
+            raise HTTPException(400, f"Could not decode {name} as UTF-8") from exc
+        parsed.append((name, text))
+    try:
+        bundle = parse_upload_bundle(parsed, source="csv_upload")
+        result = apply_adapter_result(db, bundle)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    return {"status": "ok", "imported_by": principal.name, **result}
+
+
 @router.get("/imports")
 def list_imports(db: Session = Depends(get_db)) -> list[dict]:
-    rows = db.execute(select(ImportBatch).order_by(desc(ImportBatch.created_at)).limit(20)).scalars().all()
+    rows = db.execute(select(ImportBatch).order_by(desc(ImportBatch.created_at)).limit(50)).scalars().all()
     return [
         {
             "batch_id": r.batch_id,

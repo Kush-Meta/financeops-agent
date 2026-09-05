@@ -4,7 +4,7 @@
 
 AI-powered finance operations system for investigating, reconciling, and explaining accounting issues — with an auditable, human-controlled workflow.
 
-> **Start here:** the full design narrative, architecture, reconciliation algorithm, HITL model, and evaluation results live in **[docs/DESIGN.md](docs/DESIGN.md)**.
+> **Start here:** the full design narrative, architecture, reconciliation algorithm, HITL model, and evaluation results live in **[docs/DESIGN.md](docs/DESIGN.md)**. Customer landing notes: **[docs/CUSTOMER_DEPLOYMENT.md](docs/CUSTOMER_DEPLOYMENT.md)**..
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-0f6b4c?style=flat-square)](#)
 [![Next.js](https://img.shields.io/badge/Next.js-15-0f6b4c?style=flat-square)](#)
@@ -63,6 +63,40 @@ docker compose up --build
 ```
 
 This starts Postgres 16 + API + web. Override with SQLite by setting `DATABASE_URL=sqlite:////data/financeops.db` on the API service.
+
+
+
+
+## Live demo
+
+Public tunnel (ephemeral while this Cloud Agent session is up):
+
+**https://pill-best-capability-convinced.trycloudflare.com**
+
+1. Open **Imports** → switch Acting as to **Admin** → *Load customer ERP CSVs*
+2. Open **Reconciliation** for `2024-09` → bank−ledger gap **$25,665**
+3. Open **Investigate** and ask why September cash does not match the bank
+
+For a durable URL, connect this repo to [Render](https://render.com) / [Railway](https://railway.app) using `docker-compose.yml` (Postgres + API + web). Set `NEXT_PUBLIC_API_URL=/api`, `API_PROXY_TARGET=http://api:8765`, `AUTH_ENABLED=true`, and `CORS_ORIGINS` to your web origin. See [docs/CUSTOMER_DEPLOYMENT.md](docs/CUSTOMER_DEPLOYMENT.md).
+
+## Customer ERP / bank CSV integration
+
+First-week FDE path: ingest NetSuite/QBO/bank-style CSVs, reconcile, explain.
+
+```bash
+# Load the bundled Meridian Robotics Sep-2024 extract
+curl -X POST http://127.0.0.1:8765/api/imports/customer-erp \
+  -H "X-API-Key: fo_admin_dev"
+
+# Or upload your own files (name them with vendor / invoice / bank / gl)
+curl -X POST http://127.0.0.1:8765/api/imports/csv \
+  -H "X-API-Key: fo_admin_dev" \
+  -F "files=@bank_transactions.csv" \
+  -F "files=@gl_journal.csv"
+```
+
+Sample pack: `backend/data/customer_erp/` (known bank−ledger gap **$25,665** for 2024-09).
+UI: **Imports** page. Details: [docs/CUSTOMER_DEPLOYMENT.md](docs/CUSTOMER_DEPLOYMENT.md).
 
 ## Production-oriented controls
 

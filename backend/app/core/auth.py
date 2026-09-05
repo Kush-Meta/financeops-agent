@@ -40,20 +40,26 @@ def _hash_key(raw: str) -> str:
 
 
 def resolve_api_key(api_key: Optional[str]) -> Principal:
+    """Resolve the caller.
+
+    When auth is disabled we still honor known demo keys so the UI role
+    switcher and admin-only import paths work in local demos. Missing key
+    falls back to controller.
+    """
     settings = get_settings()
+
+    if api_key and api_key in DEMO_USERS:
+        return DEMO_USERS[api_key]
+
+    expected = settings.admin_api_key_hash
+    if api_key and expected and hmac.compare_digest(_hash_key(api_key), expected):
+        return DEMO_USERS["fo_admin_dev"]
+
     if not settings.auth_enabled:
         return DEMO_USERS["fo_controller_dev"]
 
     if not api_key:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Missing X-API-Key header")
-
-    # Accept exact demo keys or SHA256 of configured admin key
-    if api_key in DEMO_USERS:
-        return DEMO_USERS[api_key]
-
-    expected = settings.admin_api_key_hash
-    if expected and hmac.compare_digest(_hash_key(api_key), expected):
-        return DEMO_USERS["fo_admin_dev"]
 
     raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid API key")
 

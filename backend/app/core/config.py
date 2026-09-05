@@ -42,6 +42,7 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     documents_dir: str = str(DATA_DIR / "documents")
     real_data_dir: str = str(DATA_DIR / "real")
+    customer_erp_dir: str = str(DATA_DIR / "customer_erp")
 
     @property
     def cors_origin_list(self) -> list[str]:

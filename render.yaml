@@ -1,0 +1,38 @@
+# Render Blueprint — one-click public demo for FinanceOps Agent
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: financeops-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:////data/financeops.db
+      - key: AUTH_ENABLED
+        value: "true"
+      - key: CORS_ORIGINS
+        sync: false
+      - key: LLM_ENABLED
+        value: "false"
+
+  - type: web
+    name: financeops-web
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: free
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          name: financeops-api
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+          # Append /api in start command / build — see Dockerfile ARG
+      - key: API_PROXY_TARGET
+        fromService:
+          name: financeops-api
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL

@@ -30,6 +30,7 @@ services:
     volumes:
       - ./backend/data/documents:/app/data/documents
       - ./backend/data/real:/app/data/real
+      - ./backend/data/customer_erp:/app/data/customer_erp
     depends_on:
       db:
         condition: service_healthy
@@ -41,7 +42,8 @@ services:
     ports:
       - "3847:3847"
     environment:
-      NEXT_PUBLIC_API_URL: http://127.0.0.1:8765/api
+      NEXT_PUBLIC_API_URL: /api
+      API_PROXY_TARGET: http://api:8765
     depends_on:
       - api
 

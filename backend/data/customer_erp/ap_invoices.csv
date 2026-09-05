@@ -1,0 +1,6 @@
+invoice_number,vendor_code,invoice_date,due_date,amount,description,status,po_number
+MR-AP-9001,V-STEEL,2024-09-03,2024-10-03,14200.00,Hot-rolled coil lot 44,open,PO-4401
+MR-AP-9002,V-FAB,2024-09-05,2024-10-05,8750.00,CNC frame machining,open,PO-4408
+MR-AP-9003,V-LOGX,2024-09-08,2024-09-22,3180.00,Outbound LTL week 36,open,PO-4412
+MR-AP-9004,V-CLOUD,2024-09-01,2024-09-15,4920.00,GPU burst capacity,open,PO-4390
+MR-AP-9005,V-AUDIT,2024-09-12,2024-10-12,15000.00,Q3 controls readiness,open,PO-4420

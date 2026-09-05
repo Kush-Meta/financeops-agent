@@ -1,5 +1,5 @@
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://127.0.0.1:8765/api";
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "/api";
 
 const API_KEY_STORAGE = "financeops_api_key";
 
@@ -104,6 +104,39 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ decision, reviewed_by: "controller", review_note: note }),
     }),
+  imports: () => request<ImportBatch[]>("/imports"),
+  importCustomerErp: () =>
+    request<ImportResult>("/imports/customer-erp", { method: "POST", body: "{}" }),
+  importRealPublic: () =>
+    request<ImportResult>("/imports/real-public", { method: "POST", body: "{}" }),
+  importCsvFiles: async (files: File[]) => {
+    const form = new FormData();
+    files.forEach((f) => form.append("files", f));
+    const res = await fetch(`${API_BASE}/imports/csv`, {
+      method: "POST",
+      headers: { "X-API-Key": getApiKey() },
+      body: form,
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return (await res.json()) as ImportResult;
+  },
+};
+
+export type ImportBatch = {
+  batch_id: string;
+  source: string;
+  description: string;
+  record_count: number;
+  details: Record<string, unknown>;
+  created_at: string | null;
+};
+
+export type ImportResult = {
+  status: string;
+  imported_by?: string;
+  batch_id?: string;
+  created?: Record<string, number>;
+  meta?: Record<string, unknown>;
 };
 
 export type ReconData = {

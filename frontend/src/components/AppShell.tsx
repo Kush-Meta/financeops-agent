@@ -11,6 +11,7 @@ import {
   MessageSquareText,
   Scale,
   ShieldAlert,
+  Upload,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getApiKey, setApiKey } from "@/lib/api";
@@ -22,6 +23,7 @@ const links = [
   { href: "/anomalies", label: "Anomalies", icon: ShieldAlert },
   { href: "/approvals", label: "Approvals", icon: GitCompare },
   { href: "/audit", label: "Audit trail", icon: Activity },
+  { href: "/imports", label: "Imports", icon: Upload },
   { href: "/records", label: "Records", icon: FileSearch },
 ];
 
